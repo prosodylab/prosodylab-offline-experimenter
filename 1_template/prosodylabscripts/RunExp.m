@@ -43,6 +43,8 @@ while max(nTrials-counter)~=0
             playList{exp}(k).order=counter(exp);
             playList{exp}(k).nTrial=trialN;
             playList{exp}(k).session=session;
+            playList{exp}(k).date = date;
+            playList{exp}(k).start = clock;
             
             %1-Display sentence to user
             if isfield(playList{exp}(k),'text')
@@ -149,7 +151,6 @@ while max(nTrials-counter)~=0
             end
             
             
-            
             response=playList{exp}(k);
             
             % Ask Questions if there are any
@@ -167,9 +168,7 @@ while max(nTrials-counter)~=0
             if isfield(playList{exp}(k),'question3')
                 response=askquestion(ws, settings, response,3);
             end
-            
-            
-            
+                        
             %---Save Responses in Response File
             
             resultline=struct2cell(response);  % convert structure into cells

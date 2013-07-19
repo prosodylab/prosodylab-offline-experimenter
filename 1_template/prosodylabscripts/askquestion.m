@@ -219,14 +219,17 @@
             trial.response=num2str(user_answer);
             trial.correct=num2str(check_answer);
             trial.rt=num2str(resp_time);
+            trial.end=clock;
         elseif qNumber==2
             trial.response2=num2str(user_answer);
             trial.correct2=num2str(check_answer);
             trial.rt2=num2str(resp_time);
+            trial.end=clock;
         else
             trial.response3=num2str(user_answer);
             trial.correct3=num2str(check_answer);
             trial.rt3=num2str(resp_time);
+            trial.end=clock;
         end
         
         response=trial;

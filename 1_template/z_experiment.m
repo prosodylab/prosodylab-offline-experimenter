@@ -81,7 +81,7 @@ recordFile(1)=1;
 
 
     % additional column names
-    settings.additionalColNames={'participant','playlist','order','trialN','session'};
+    settings.additionalColNames={'participant','playlist','order','trialN','session', 'date', 'start'};
 
     % space between lines in instruction
     settings.linespace=30;
@@ -191,6 +191,10 @@ for i=1:nExperiments
             end
             
         end
+        
+        % add columnname for end time
+        additionalNames = [additionalNames, 'end'];
+        
         additionalNames=sprintf('%s\t',additionalNames{:});
         
         columnNames{i}=sprintf('%s\t',columnNames{i}{:});
