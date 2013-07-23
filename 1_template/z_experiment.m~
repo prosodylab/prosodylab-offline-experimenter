@@ -18,7 +18,7 @@ experiments=[1:nExperiments];
 % If you want more than one experiment in a session, you can specify this
 % as a list: session{1}=[1 2 3];
 
-nSessions=2;
+nSessions=3;
 session{1} = 1;
 instructions{1}='instructions.txt';
 
@@ -250,17 +250,26 @@ for i=1:nSessions
     
     temp = size(session{i});
     
-    experiments=session{i};
-    %Display Screen
-    ws = doScreen(settings);
-    
     for j=1:temp(2)
-        % experiments = session{i}(j);
+        experiments = session{i}(j);
+        
+        %Display Screen
+        ws = doScreen(settings);
         
         displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
-        RunExp(experiments, playList, nTrials, pList, participant, recordFile, responsesFilename, settings, i, ws);
-    end
+        RunExp(experiments, playList, nTrials, pList, participant, recordFile, responsesFilename, settings, i, ws
     
+    experiments=session{i};
+    
+    %Display Screen
+    ws = doScreen(settings);
+    %ListenChar(2);
+
+    displayInstructions(ws, [ settings.path_instructions instructions{i}],settings);
+    
+    RunExp(experiments,playList,nTrials,pList,participant,recordFile,responsesFilename,settings,i,ws);
+
+
 end
 
 %Display Thank You Screen
