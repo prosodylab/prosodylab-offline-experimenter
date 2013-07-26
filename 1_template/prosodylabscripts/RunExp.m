@@ -43,8 +43,8 @@ while max(nTrials-counter)~=0
             playList{exp}(k).order=counter(exp);
             playList{exp}(k).nTrial=trialN;
             playList{exp}(k).session=session;
-            playList{exp}(k).date = date;
-            playList{exp}(k).start = clock;
+            todaysdate=num2str(date);
+            starttime=num2str(datestr(now,13));
             
             %1-Display sentence to user
             if isfield(playList{exp}(k),'text')
@@ -89,6 +89,8 @@ while max(nTrials-counter)~=0
             
             
             %---Display Text
+            
+            tic;
             
             while KbCheck([-1]); end;
             
@@ -170,6 +172,13 @@ while max(nTrials-counter)~=0
             end
                         
             %---Save Responses in Response File
+            
+  
+            response.trialDuration=toc;
+            response.date=todaysdate;
+            response.trialStart=starttime;
+            response.trialEnd=num2str(datestr(now,13));
+            
             
             resultline=struct2cell(response);  % convert structure into cells
             [nColumns a]=size(resultline);

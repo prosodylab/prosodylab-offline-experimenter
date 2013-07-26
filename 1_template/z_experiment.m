@@ -18,7 +18,7 @@ experiments=[1:nExperiments];
 % If you want more than one experiment in a session, you can specify this
 % as a list: session{1}=[1 2 3];
 
-nSessions=2;
+nSessions=1;
 session{1} = 1;
 instructions{1}='instructions.txt';
 
@@ -83,7 +83,7 @@ recordFile(1)=1;
 
 
     % additional column names
-    settings.additionalColNames={'participant','playlist','order','trialN','session', 'date', 'start'};
+    settings.additionalColNames={'participant','playlist','order','trialN','session'};
 
     % space between lines in instruction
     settings.linespace=30;
@@ -195,7 +195,7 @@ for i=1:nExperiments
         end
         
         % add columnname for end time
-        additionalNames = [additionalNames, 'end'];
+        additionalNames = [additionalNames, 'trialDuration','date','trialStart','trialEnd'];
         
         additionalNames=sprintf('%s\t',additionalNames{:});
         
