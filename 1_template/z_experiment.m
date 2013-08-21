@@ -130,7 +130,7 @@ recordFile(1)=1;
     %default outputdevice: use ''
     %(unnecessary to worry about if you don't want to play sounds)
     settings.outputdevice=3;
-    settings.inputdevice=0;
+    settings.inputdevice=1;
     
     settings.sampfreq=22050;
     settings.maxsecs=300;
@@ -208,6 +208,17 @@ for i=1:nExperiments
         fclose(fid);  %close file
     end
 end
+
+% check device numbers for input and output are correct
+devices = PsychPortAudio('GetDevices');
+
+disp(['input device: ' devices(settings.inputdevice).DeviceName]);
+
+disp(['output device: ' devices(settings.outputdevice).DeviceName]);
+
+while KbCheck(-1); end;
+disp('ok?');
+while ~KbCheck(-1); end;
 
 % Get Participant number
 % check whether particpant has already taken part in experiment 1
