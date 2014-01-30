@@ -1,15 +1,15 @@
 function []=RunExp(experiments,playList,nTrials,pList,participant,recordFile,responsesFilename,settings,session,ws)
 
-[nexp,~]=size(experiments);
+[~,nexp]=size(experiments);
 
-%
+
 %
 %
 % Experiment
 %
 %
 %
-%
+
 
 % if there are separate instructions for this part
 % displayInstructions(ws, [ path_instructions 'instructionsPart1.txt'],settings);
@@ -17,10 +17,10 @@ function []=RunExp(experiments,playList,nTrials,pList,participant,recordFile,res
 counter(1:nexp)=0;
 trialN=0;
 
-% Main loop for the experiment
+% Main loop for the session
 while max(nTrials-counter)~=0
     
-    % this should be 1:nExperiment for other experiments
+    % run through one trial from each experiment
     for i=1:nexp
         
         exp=experiments(i);
@@ -68,18 +68,34 @@ while max(nTrials-counter)~=0
             end
             
             if isfield(playList{exp}(k),'context')
-                context=[ context '\n\n' playList{exp}(k).context ];
+                context=[ context '\n\n[ ' playList{exp}(k).context ' ]'];
             else
                 context=[];
             end
             
+           
+            
             % Check whether a soundfile should be played
             
             if isfield(playList{exp}(k),'contextFile')
-                contextFile=[ settings.path_stimuli playList{exp}(k).contextFile];
+                contextFile=[ settings.path_contexts playList{exp}(k).contextFile];
             else
                 contextFile=[];
             end
+            
+            if isfield(playList{exp}(k), 'answerFile')
+                answerFile = [settings.path_answers playList{exp}(k).answerFile];
+            else
+                answerFile=[];
+            end
+            
+            if isfield(playList{exp}(k), 'answerFile2')
+                answerFile2 = [settings.path_answers playList{exp}(k).answerFile2];
+            else
+                answerFile2 = [];
+            end
+            
+            
             
             if isfield(playList{exp}(k),'labtext')
                 labtext=playList{exp}(k).labtext;
@@ -94,7 +110,7 @@ while max(nTrials-counter)~=0
             
             while KbCheck([-1]); end;
             
-            DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+            DrawFormattedText(ws.ptr, double(settings.message4),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
             
@@ -102,6 +118,11 @@ while max(nTrials-counter)~=0
             Screen('Flip',ws.ptr);
             
             while ~KbCheck([-1]); end;
+            
+            
+            if ~isempty(contextFile) 
+                playSound(contextFile, settings);    
+            end
             
             if recordFile(exp)==1
                 
@@ -112,7 +133,7 @@ while max(nTrials-counter)~=0
                 if ~isempty(ws)
                     
                     if display
-                        DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
                         
@@ -122,8 +143,11 @@ while max(nTrials-counter)~=0
                         Screen('Flip',ws.ptr);
                     end
                 end
-                              
-                [recordedaudio]=RecordSound(contextFile,settings, ws);
+                
+                % records files --> we don't want to record we want to play
+                % files
+                
+                [recordedaudio]=RecordSound(settings, ws);
                 
                 %Construct wave file name
                 wavfilename=[playList{exp}(k).experiment '_'...
@@ -148,8 +172,21 @@ while max(nTrials-counter)~=0
                 fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
                 fprintf(fid,'%s\n',labtext);  %print item text to file
                 fclose(fid);  %close file
-            elseif ~isempty(contextFile)
-                PlaySound(settings);
+                
+                
+            else
+                
+                if  ~isempty(answerFile)
+                    WaitSecs(0.5);
+                    playSound(answerFile, settings);
+                end
+                
+                if ~isempty(answerFile2)
+                    WaitSecs(0.5);
+                    playSound(answerFile2, settings);
+                end
+                
+                
             end
             
             
