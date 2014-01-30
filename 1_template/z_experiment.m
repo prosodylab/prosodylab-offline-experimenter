@@ -22,7 +22,7 @@ nSessions=1;
 session{1} = 1;
 instructions{1}='instructions.txt';
 
-session{2} = [1 2];
+session{2} = [1 2 3];
 instructions{2}='instructions.txt'; 
 
 
@@ -31,9 +31,9 @@ instructions{2}='instructions.txt';
 % only columns that are labeled in the header row will be
 % read into a data structure
 
-item_file{1}='items2.txt';
+item_file{1}='polish1010.txt';
 item_file{2}='items3.txt';
-item_file{3}='items4.txt';
+item_file{3}='items6.txt';
 %item_file{4}='items5.txt';
 
 % Design
@@ -212,21 +212,44 @@ end
 % check device numbers for input and output are correct
 devices = PsychPortAudio('GetDevices');
 
-disp(['input device: ' devices(settings.inputdevice).DeviceName]);
+findInput=find([devices.DeviceIndex]==settings.inputdevice);
+findOutput=find([devices.DeviceIndex]==settings.outputdevice);
 
-disp(['output device: ' devices(settings.outputdevice).DeviceName]);
+disp(' ');
+%deviceTable=struct2table(devices);
+%disp(deviceTable(:,[1 4]));
+
+disp(' ');
+disp('Currently you have selected:');
+disp(' ');
+disp(['input device:  ' num2str(settings.inputdevice) '     '  devices(findInput).DeviceName]);
+disp(['output device:  ' num2str(settings.outputdevice) '     '  devices(findOutput).DeviceName]);
+disp(' ');
+disp('(you can change this number in the matlab script)');
+disp(' ');
 
 while KbCheck(-1); end;
 disp('ok?');
 while ~KbCheck(-1); end;
 
+
+[~, ~, keyCode]=KbCheck(-1);
+
+if strcmp('n',KbName(keyCode))
+    error('Ok! Please change device numbers in the script!');
+end
+
+
 % Get Participant number
 % check whether particpant has already taken part in experiment 1
 % if not, detemrine plist number
 
+flushinput();
+
 ok=0;
 while ~ok
     participant = input('Please enter the participant number: ', 's');
+    
     [participant ok]=str2num(participant);
     if ok
         [pList ok]=checkSetup(participant,design,responsesFilename,nExperiments);
@@ -253,10 +276,8 @@ elseif design(1) == 2
 elseif design(1) == 3
     disp(['pseudo-random']);
 elseif design(1) == 4
-    disp(['pseudo-random']);
-elseif design(1) == 5
     disp(['latin square']);
-elseif desgin(1) == 6
+elseif desgin(1) == 5
     disp(['blocked']);
 end
 
@@ -269,30 +290,27 @@ while ~KbCheck(-1); end;
 if strcmp('n',KbName(keyCode))
     plistchoice=input('Ok! Please change the design number in the script!', 's');
 else
-
-    
-for i=1:nSessions
-    % for each session, run RunExp (this includes a practice run)
-    
-    temp = size(session{i});
-    
-    experiments=session{i};
-    %Display Screen
-    ws = doScreen(settings);
-    
-    for j=1:temp(2)
-        % experiments = session{i}(j);
+    for i=1:nSessions
+        % for each session, run RunExp (this includes a practice run)
+        
+        %Set up Screen
+        ws = doScreen(settings);
+        
+        % Making sure font settings are correct
+        Screen('Preference', 'TextRenderer', 1 );
+        Screen('Preference','TextEncodingLocale','UTF-8');
+        Screen('TextSize', ws.ptr, settings.textsize);
         
         displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
-        RunExp(experiments, playList, nTrials, pList, participant, recordFile, responsesFilename, settings, i, ws);
+        RunExp(session{i}, playList, nTrials, pList, participant, recordFile, responsesFilename, settings, i, ws);
+        
     end
     
+    %Display Thank You Screen
+    Screen('TextSize',ws.ptr,60);
+    drawText('Thank You!',ws,1);
+    
+    %ListenChar(0);
 end
 
-%Display Thank You Screen
-Screen('TextSize',ws.ptr,60);
-drawText('Thank You!',ws,1);
-
-%ListenChar(0);
-end
 clear screen

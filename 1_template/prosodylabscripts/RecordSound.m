@@ -1,4 +1,4 @@
-function [recordedaudio]=RecordSound(contextFile, settings, screen)
+function [recordedaudio]=RecordSound(settings, screen)
 
 samplingrate=settings.sampfreq;
 voicetrigger=settings.voicetrigger;
@@ -11,36 +11,6 @@ while KbCheck([-1]); end;
 
 InitializePsychSound;
 
-
-% play contextFile if there is one
-
-if ~isempty(contextFile)
-    % read in context file
-    [y, freq, nbits] = wavread(contextFile);
-    wavedata = y';
-    nrchannels = size(wavedata,1);
-    duration=size(wavedata,2)/freq;
-    
-    % Basic initialization  sound driver:
-    
-    pahandle = PsychPortAudio('Open', [settings.outputdevice], [1], 0, freq, nrchannels);
-    
-    % Fill the audio playback buffer with the audio data 'wavedata':
-    PsychPortAudio('FillBuffer', pahandle, wavedata);
-    
-    % Start audio playback for 'repetitions' repetitions of the sound data,
-    % start it immediately (0) and wait for the playback to start, return onset
-    % timestamp.
-    t1 = PsychPortAudio('Start', pahandle, 1, 0, 1);
-    
-    WaitSecs(duration);
-    
-    % Stop playback:
-    PsychPortAudio('Stop', pahandle);
-    
-    % Close the audio device:
-    PsychPortAudio('Close', pahandle);
-end
 
 % Basic initialization  sound driver:
 
