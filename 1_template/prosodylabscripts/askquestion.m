@@ -12,20 +12,20 @@
      quText=trial.question;
      qType=trial.qType;
      
-     if exist('trial.correctAnswer')
+     if isfield(trial,'correctAnswer')
                 correctAnswer=trial.correctAnswer;
-                answer1=correctAnswer;
+                answer1=correctAnswer;             
      end
      
-     if exist('trial.altAnswer1')
+     if isfield(trial,'altAnswer1')
             answer2=trial.altAnswer1;
      end
      
-     if exist('trial.altAnswer2')
+     if isfield(trial,'altAnswer2')
             answer3= trial.altAnswer2;
      end
      
-     if exist('trial.altAnswer3')
+     if isfield(trial,'altAnswer3')
             answer4= trial.altAnswer3;
      end
                 
@@ -127,21 +127,21 @@
                     
                  rand_index=randperm(2);
                  answer_array={answer1 answer2};
-                 mc_options=strcat('1. ',answer_array{rand_index(1)},'\n','2. ',answer_array{rand_index(2)},'\n\n\n',quText);
+                 mc_options=strcat(quText,'\n\n\n',' 1.  ',answer_array{rand_index(1)},'\n\n',' 2.  ',answer_array{rand_index(2)});
                  
             elseif trial.nChoices==3
                 
                 rand_index=randperm(3);
                 answer_array={answer1 answer2 answer3};
                 
-                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n\n\n',quText);
+                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2.  ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n\n\n',quText);
        
             else
                 
                 rand_index=randperm(4);
                 answer_array={answer1 answer2 answer3 answer4};
                 
-                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n', answer_array{rand_index(4)},'\n\n\n',quText);
+                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n', answer_array{rand_index(4)},'\n\n\n',quText);
             
             end
             
@@ -151,7 +151,9 @@
             [pressed_key resp_time]= getResponseKeypad(accepted_keys,inf);
             pressed_key=str2num(pressed_key);
             %Convert number answer to sentence text
-            if pressed_key==1
+            if pressed_key<min(rand_index)||pressed_key>max(rand_index)
+                user_answer='';
+            elseif   pressed_key==1
                 user_answer=answer_array{rand_index(1)};
             elseif pressed_key==2
                 user_answer=answer_array{rand_index(2)};
@@ -159,6 +161,7 @@
                 user_answer=answer_array{rand_index(3)};
             elseif pressed_key==4
                 user_answer=answer_array{rand_index(4)};
+            else user_answer='';    
             end
             
             check_answer=strcmp(user_answer, correctAnswer);
