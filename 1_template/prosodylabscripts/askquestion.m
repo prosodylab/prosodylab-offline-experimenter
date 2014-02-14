@@ -119,10 +119,16 @@
         
             user_answer=num2str(pressed_key);
             check_answer=' ';
-        elseif (strcmp(qType,'mc'))
+        elseif (strcmp(qType,'mc'))||(strcmp(qType,'mcF'))
             
             %Multiple Choice
-  
+            
+            if (strcmp(qType,'mc'))
+                rand_index=randperm(trial.nChoices);
+            else
+                rand_index=1:trial.nChoices;
+            end
+            
             if trial.nChoices==2
                     
                  rand_index=randperm(2);
@@ -153,15 +159,8 @@
             %Convert number answer to sentence text
             if pressed_key<min(rand_index)||pressed_key>max(rand_index)
                 user_answer='';
-            elseif   pressed_key==1
-                user_answer=answer_array{rand_index(1)};
-            elseif pressed_key==2
-                user_answer=answer_array{rand_index(2)};
-            elseif pressed_key==3
-                user_answer=answer_array{rand_index(3)};
-            elseif pressed_key==4
-                user_answer=answer_array{rand_index(4)};
-            else user_answer='';    
+            else
+                user_answer=answer_array{rand_index(pressed_key)};    
             end
             
             check_answer=strcmp(user_answer, correctAnswer);
