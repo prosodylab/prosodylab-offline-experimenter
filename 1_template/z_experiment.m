@@ -17,6 +17,7 @@ experiments=[1:nExperiments];
 % session 1, the others in later sessions.
 % If you want more than one experiment in a session, you can specify this
 % as a list: session{1}=[1 2 3];
+% .
 
 nSessions=1;
 session{1} = 1;
