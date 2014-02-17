@@ -244,8 +244,6 @@ end
 % check whether particpant has already taken part in experiment 1
 % if not, detemrine plist number
 
-flushinput();
-
 ok=0;
 while ~ok
     participant = input('Please enter the participant number: ', 's');
