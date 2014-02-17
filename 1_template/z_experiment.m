@@ -66,7 +66,6 @@ designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Blocked'};
 
 design(1)=3;
 
-
 % Is a file recorded for a given experiment?
 % Maybe could be in spreadsheet instead
 recordFile(nExperiments)=0;
