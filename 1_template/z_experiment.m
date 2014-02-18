@@ -277,7 +277,7 @@ elseif design(1) == 3
     disp(['pseudo-random']);
 elseif design(1) == 4
     disp(['latin square']);
-elseif desgin(1) == 5
+elseif design(1) == 5
     disp(['blocked']);
 end
 
