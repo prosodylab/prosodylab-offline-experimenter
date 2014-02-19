@@ -78,8 +78,8 @@ recordFile(1)=1;
     settings.path_items='1_experiment/';
     settings.path_instructions='1_experiment/';
     settings.path_stimuli='2_stimuli/';
-    settings.path_contexts='2_stimuli/';
-    settings.path_answers='2_stimuli/';
+    settings.path_contexts='2_contexts/';
+    settings.path_answers='2_answers/';
     settings.path_results='2_data/';
     settings.path_soundfiles='2_data/1_soundfiles/';
 
