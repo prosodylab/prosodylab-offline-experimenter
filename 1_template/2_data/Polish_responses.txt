@@ -1,0 +1,1 @@
+experiment	item	condition	conditionlabel	syntax	context	text	question	qType	participant	playlist	order	trialN	session	recordedFile	response	correct	rt	trialDuration	date	trialStart	trialEnd	

@@ -32,7 +32,7 @@ instructions{2}='instructions.txt';
 % only columns that are labeled in the header row will be
 % read into a data structure
 
-item_file{1}='polish1010.txt';
+item_file{1}='items1.txt';
 item_file{2}='items3.txt';
 item_file{3}='items6.txt';
 %item_file{4}='items5.txt';
@@ -102,11 +102,10 @@ recordFile(1)=1;
     % so I know which line is which!
 
     %settings.message ='Read silently. Press any key when you''re ready for the dialogue.';
-    settings.message ='Please read the last line carefully click any key when you''re ready to record!'; 
-    settings.message2 ='Please say the last line out loud now. Press any key when you''re done recording!';
-    settings.message3 ='Press any key when you''re ready for the next set of instructions!';
-    settings.message4 ='Press any key when you''re ready for the next set of instructions!';
-    settings.messageShow='Read silently and make sure you understand the sentences.';
+    settings.message ='Please read the sentence silently. Click any key when you''re ready to record!'; 
+    settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
+    settings.message3 ='Press any key when you''re ready for the next sentence!';
+    settings.message4 ='Press any key when you''re ready for the next sentence!';
     
     %settings.messageThankYou='Thank You!';
     settings.messageThankYou='Thank You!';
@@ -131,8 +130,8 @@ recordFile(1)=1;
     %(unnecessary to worry about if you don't want to record sounds)
     %default outputdevice: use ''
     %(unnecessary to worry about if you don't want to play sounds)
-    settings.outputdevice=3;
-    settings.inputdevice=1;
+    settings.outputdevice=5;
+    settings.inputdevice=5;
     
     settings.sampfreq=22050;
     settings.maxsecs=300;
@@ -218,8 +217,8 @@ findInput=find([devices.DeviceIndex]==settings.inputdevice);
 findOutput=find([devices.DeviceIndex]==settings.outputdevice);
 
 disp(' ');
-%deviceTable=struct2table(devices);
-%disp(deviceTable(:,[1 4]));
+deviceTable=struct2table(devices);
+disp(deviceTable(:,[1 4]));
 
 disp(' ');
 disp('Currently you have selected:');
@@ -227,11 +226,12 @@ disp(' ');
 disp(['input device:  ' num2str(settings.inputdevice) '     '  devices(findInput).DeviceName]);
 disp(['output device:  ' num2str(settings.outputdevice) '     '  devices(findOutput).DeviceName]);
 disp(' ');
-disp('(you can change this number in the matlab script)');
+disp('(you can change this number on line 132-133 in code)');
 disp(' ');
 
 while KbCheck(-1); end;
 disp('ok?');
+disp(' ');
 while ~KbCheck(-1); end;
 
 

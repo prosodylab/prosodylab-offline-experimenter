@@ -110,7 +110,7 @@ while max(nTrials-counter)~=0
             
             while KbCheck([-1]); end;
             
-            DrawFormattedText(ws.ptr, double(settings.message4),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+            DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
             
@@ -133,7 +133,7 @@ while max(nTrials-counter)~=0
                 if ~isempty(ws)
                     
                     if display
-                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
                         
