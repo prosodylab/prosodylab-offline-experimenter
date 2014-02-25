@@ -125,7 +125,7 @@
             
             if (strcmp(qType,'mc'))
                 rand_index=randperm(trial.nChoices);
-            else
+            elseif (strcmp(qType,'mcF'))
                 rand_index=1:trial.nChoices;
             end
             
