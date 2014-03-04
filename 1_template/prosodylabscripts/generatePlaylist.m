@@ -2,30 +2,30 @@
 % chael@mcgill.ca 02/19/12
 
 
-function [playList,nTrials]=generatePlaylist(items,pList,design,experiments)
+function [playList,nTrials]=generatePlaylist(items,pList,experiments)
 
-% Design:
+% Designs:
 % decides how the trials will be ordered
 % and whether it's latin square or not
 % Options:
-% 1 : Fixed Order (No Randomization):
+% 1 : Fixed (No Randomization):
 %     Play all trials in the order of spreadsheet
 %     column "condition" and "item" will be ignored
-% 2 : Completely random:
+% 2 : Random:
 %     Play all trials in random order
 %     column "condition" and "item" will be ignored
-% 3 : Pseudo-random:
+% 3 : PseudoRandom:
 %     Every condition from every item for each participant
 %     Items aren't repeated more than once (in fact, a repetition of same
 %     item can only happen once per experiment)
 %     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
-% 4 : Pseudo-random, latin square:
+% 4 : LatinSquare:
 %     Only one condition from each item per subject
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
-% 5 : Between Subjects:
+% 5 : Between:
 %     Each participant see sonly one conditions.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
@@ -42,17 +42,17 @@ function [playList,nTrials]=generatePlaylist(items,pList,design,experiments)
 for k=1:nExperiments
     
     exp=experiments(k);
+    design=items{exp}(1).design;
     
     
     trial=0;
     
-    if design(exp)==1
-        % Fixed Order
+    if strcmp(design,'Fixed')
         playList{exp}=items{exp};
         [~,length]=size(playList{exp});
         nTrials(exp)=length;
         
-    elseif design(exp)==2
+    elseif strcmp(design,'Random')
         % All trials, random order
         playList{exp}=items{exp};
         [~,length]=size(playList{exp});
@@ -61,12 +61,13 @@ for k=1:nExperiments
         for i=1:length
             newList(i)=playList{exp}(rTrial(i));
         end
-        newList=playList{exp};
+        playList{exp}=newlist;
         nTrials(exp)=length;
         
-    elseif design(exp)==3
+    elseif strcmp(design,'PseudoRandom')
         % Pseudo-Random, Each Condition from Each Item for Each Participant
-        
+        % each block like latin square design with one condition from each
+        % item
         nItems=max([items{exp}(:).item]);
         nConditions=max([items{exp}(:).condition]);
         
@@ -136,7 +137,7 @@ for k=1:nExperiments
         nTrials(exp)=nConditions*nItems;
         
         
-    elseif design(exp)==4
+    elseif strcmp(design,'LatinSquare')
         % Latin Square: One condition from each item for each participant
         
         
@@ -195,8 +196,8 @@ for k=1:nExperiments
         nTrials(exp)=nItems;
         
         
-    elseif design(k)==5
-        %Blocked: Every subject sees only one condition
+    elseif strcmp(design,'Between')
+        %Between: Every subject sees only one condition
         
         nItems=max([items{exp}(:).item]);
         nConditions=max([items{exp}(:).condition]);
@@ -206,8 +207,8 @@ for k=1:nExperiments
         %Loop through items
         for i=1:nItems
             selectCondition=pList(exp);
-            selectItem=i;
-            index=selectItem*nConditions-selectCondition+1;
+            selectItem=i-1;
+            index=selectItem*nConditions+selectCondition;
             playList{exp}(i)=items{exp}(index);
         end
         
@@ -219,10 +220,10 @@ for k=1:nExperiments
         playList{exp}=newList;
         nTrials(exp)=nItems;
         
-    elseif design(k)==6
-        %Blocked: Every subject sees only all conditions, but blocked, 2
-        %conditions total
-        
+    elseif strcmp(design,'Blocked')
+        %Blocked: Every subject sees all conditions, but in separate
+        %consecutive blocks (blocks in random order)
+             
         nItems=max([items{exp}(:).item]);
         nConditions=max([items{exp}(:).condition]);
         
@@ -256,7 +257,9 @@ for k=1:nExperiments
         playList{exp}=newList;
         nTrials(exp)=2*nItems;
         
-    end
+    else
+        
+        error(['design: ' num2str(design) 'is  unknown!'])
     
     
 end

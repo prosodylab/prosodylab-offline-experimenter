@@ -1,4 +1,4 @@
-function []=RunExp(experiments,playList,nTrials,pList,participant,recordFile,responsesFilename,settings,session,ws)
+function []=RunExp(experiments,playList,nTrials,pList,participant,responsesFilename,settings,session,ws)
 
 [~,nexp]=size(experiments);
 
@@ -124,7 +124,8 @@ while max(nTrials-counter)~=0
                 playSound(contextFile, settings);    
             end
             
-            if recordFile(exp)==1
+            if isfield(playList{exp}(k),'record')
+                if playList{exp}(k).record=='y'
                 
                 display=1; % If text should vanish during recording, set to 0;
                 
@@ -173,9 +174,8 @@ while max(nTrials-counter)~=0
                 fprintf(fid,'%s\n',labtext);  %print item text to file
                 fclose(fid);  %close file
                 
-                
+                end
             else
-                
                 if  ~isempty(answerFile)
                     WaitSecs(0.5);
                     playSound(answerFile, settings);
