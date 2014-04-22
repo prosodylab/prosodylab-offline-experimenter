@@ -241,7 +241,7 @@ for k=1:nExperiments
         end
         
         rCond=0;
-        while rCond<>pList(exp)
+        while rCond~=pList(exp)
             rCond=randperm(nConditions);
         end
         
