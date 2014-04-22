@@ -62,13 +62,13 @@ while max(nTrials-counter)~=0
             context=[];
             
             if isfield(playList{exp}(k),'setup')
-                context=playList{exp}(k).setup;
+                context=[ '[' playList{exp}(k).setup ']'];
             else
                 context=[];
             end
             
             if isfield(playList{exp}(k),'context')
-                context=[ context '\n\n[ ' playList{exp}(k).context ' ]'];
+                context=[ context '\n\n' playList{exp}(k).context ];
             else
                 context=[];
             end
@@ -218,7 +218,7 @@ while max(nTrials-counter)~=0
             
             
             resultline=struct2cell(response);  % convert structure into cells
-            [nColumns a]=size(resultline);
+            [nColumns, ~]=size(resultline);
             
             output='';
             
