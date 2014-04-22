@@ -240,7 +240,11 @@ for k=1:nExperiments
             end
         end
         
-        rCond=randperm(nConditions);
+        rCond=0;
+        while rCond<>pList(exp)
+            rCond=randperm(nConditions);
+        end
+        
         for j=1:nConditions
             selectCondition=rCond(j);
             rTrial=randperm(nItems);
