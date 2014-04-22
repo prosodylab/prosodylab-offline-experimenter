@@ -227,35 +227,32 @@ for k=1:nExperiments
         nItems=max([items{exp}(:).item]);
         nConditions=max([items{exp}(:).condition]);
         
-        if nConditions ~= 2
-            error('For design 6 you can only have 2 conditions.');
-        end
-        
         disp(['playlist of exp: ' num2str(pList(exp)) '   nitem/ncon:  ' num2str(nItems) ' \ ' num2str(nConditions) ]);
         
         %Loop through items
-        for j=1:2
-            condi=mod(j+pList(exp)-1,2)+1;
+        for j=1:nConditions
+            selectCondition=mod(j+pList(exp)-1,nConditions)+1;
             for i=1:nItems
-                selectCondition=condi;
                 selectItem=i;
-                trial=i+(j-1)*nItems;
+                trial=(j-1)*nItems+i;
                 index=selectItem*nConditions-selectCondition+1;
                 playList{exp}(trial)=items{exp}(index);
             end
         end
         
-        for j=1:2
+        rCond=randperm(nConditions);
+        for j=1:nConditions
+            selectCondition=rCond(j);
             rTrial=randperm(nItems);
             for i=1:nItems
                 newTrial=(j-1)*nItems+i;
-                trial=(j-1)*nItems+rTrial(i);
+                trial=(selectCondition-1)*nItems+rTrial(i);
                 newList(newTrial)=playList{exp}(trial);
             end
         end
         
         playList{exp}=newList;
-        nTrials(exp)=2*nItems;
+        nTrials(exp)=nConditions*nItems;
         
     else
         

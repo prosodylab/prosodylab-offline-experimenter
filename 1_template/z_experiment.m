@@ -34,7 +34,7 @@ instructions{2}='instructions.txt';
 % only columns that are labeled in the header row will be
 % read into a data structure
 
-item_file{1}='doff.txt';
+item_file{1}='doffBlocked.txt';
 item_file{2}='items3.txt';
 item_file{3}='items6.txt';
 %item_file{4}='items5.txt';
