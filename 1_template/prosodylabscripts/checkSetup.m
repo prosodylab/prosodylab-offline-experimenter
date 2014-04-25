@@ -34,12 +34,18 @@ for j=1:nExperiments
         if strcmp(design,'PseudoRandom') || strcmp(design,'LatinSquare')||strcmp(design,'Between') || strcmp(design,'Blocked')
             
             nLists = max([items{j}.condition]);
-            
-            plistsAlreadyRun = unique([results(:).playlist]);
-            maxList=max(plistsAlreadyRun);
             plistsToBeRun = 1:nLists;
-            assignments=histc(plistsAlreadyRun,plistsToBeRun);
             
+            maxTrial=max([results(:).order]);
+            allTrials=[results(:).order];
+            completeRuns=allTrials==maxTrial;
+            nParticipants=sum(completeRuns);
+           
+            listsSofar=[results(completeRuns).playlist];
+            plistsAlreadyRun=unique(listsSofar);
+            assignments = histc(listsSofar,plistsToBeRun);
+            maxList=max(plistsAlreadyRun);
+
             if maxList>nLists
                 error('\n%s\n','Problem with PlayList Column in Responses File--a playlist out of range is recorded in responses file!');
             else
@@ -51,15 +57,19 @@ for j=1:nExperiments
             
             disp(sprintf('\n%s',['Number of Conditions/Playlists in experiment: ' num2str(nLists)]));
             
+            disp(sprintf('\n%s',['Names of Participants that have completed the experiment: ' num2str(nParticipants)]));
+            
             disp(sprintf('\n%s',['Names of Playlists that have been played: ' num2str(plistsAlreadyRun)]));
             
-            disp(sprintf('%s',['Participants per for each list so far    : ' num2str(assignments)]));
+            disp(sprintf('%s',['Number of Participants that completed each list: ' num2str(assignments)]));
             
-            disp(sprintf('\n%s\n',['Assigned Playlist : ' num2str(pList(j))]));
+            disp(sprintf('%s',['This adds up to:  ' num2str(sum(assignments)) '  and should be equal to # participants. ']));
+            
+            disp(sprintf('\n%s\n',['Assigned Playlist: ' num2str(pList(j)) '   (should be the one with least participants)']));
             
             
             while KbCheck(-1); end;
-            disp('ok?');
+            disp('ok (# of particpants per playlist should be balanced)?');
             while ~KbCheck(-1); end;
             
             [~, ~, keyCode]=KbCheck(-1);

@@ -192,21 +192,33 @@ while max(nTrials-counter)~=0
             
             response=playList{exp}(k);
             
-            % Ask Questions if there are any
-            
-            if isfield(playList{exp}(k),'question')
+             % Ask Questions if there are any
+
+            %check that contents of field question ~= "no".
+            if isfield(playList{exp}(k),'question') && ~strcmpi(playList{exp}(k).question,'no')
+                
+                response.response='';
+                response.correct='';
+                response.rt='';
                 response=askquestion(ws, settings, response,1);
             else
                 response=playList{exp}(k);
             end
             
-            if isfield(playList{exp}(k),'question2')
+            if isfield(playList{exp}(k),'question2') && ~strcmpi(playList{exp}(k).question2,'no')
+                response.response2='';
+                response.correct2='';
+                response.rt2='';
                 response=askquestion(ws, settings, response,2);
             end
             
-            if isfield(playList{exp}(k),'question3')
+            if isfield(playList{exp}(k),'question3')&& ~strcmpi(playList{exp}(k).question3,'no')
+                response.response3='';
+                response.correct3='';
+                response.rt3='';
                 response=askquestion(ws, settings, response,3);
             end
+                        
                         
             %---Save Responses in Response File
             
