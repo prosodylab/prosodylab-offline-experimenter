@@ -1,4 +1,4 @@
-function []=RunExp(experiments,playList,nTrials,pList,participant,recordFile,responsesFilename,settings,session,ws)
+function []=RunExp(experiments,playList,nTrials,pList,participant,responsesFilename,settings,session,ws)
 
 [~,nexp]=size(experiments);
 
@@ -62,13 +62,13 @@ while max(nTrials-counter)~=0
             context=[];
             
             if isfield(playList{exp}(k),'setup')
-                context=playList{exp}(k).setup;
+                context=[ '[' playList{exp}(k).setup ']'];
             else
                 context=[];
             end
             
             if isfield(playList{exp}(k),'context')
-                context=[ context '\n\n[ ' playList{exp}(k).context ' ]'];
+                context=[ context '\n\n' playList{exp}(k).context ];
             else
                 context=[];
             end
@@ -110,7 +110,7 @@ while max(nTrials-counter)~=0
             
             while KbCheck([-1]); end;
             
-            DrawFormattedText(ws.ptr, double(settings.message4),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+            DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
             DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
             
@@ -124,7 +124,8 @@ while max(nTrials-counter)~=0
                 playSound(contextFile, settings);    
             end
             
-            if recordFile(exp)==1
+            if isfield(playList{exp}(k),'record')
+                if playList{exp}(k).record=='y'
                 
                 display=1; % If text should vanish during recording, set to 0;
                 
@@ -133,7 +134,7 @@ while max(nTrials-counter)~=0
                 if ~isempty(ws)
                     
                     if display
-                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
                         DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
                         
@@ -173,9 +174,8 @@ while max(nTrials-counter)~=0
                 fprintf(fid,'%s\n',labtext);  %print item text to file
                 fclose(fid);  %close file
                 
-                
+                end
             else
-                
                 if  ~isempty(answerFile)
                     WaitSecs(0.5);
                     playSound(answerFile, settings);
@@ -192,21 +192,33 @@ while max(nTrials-counter)~=0
             
             response=playList{exp}(k);
             
-            % Ask Questions if there are any
-            
-            if isfield(playList{exp}(k),'question')
+             % Ask Questions if there are any
+
+            %check that contents of field question ~= "no".
+            if isfield(playList{exp}(k),'question') && ~strcmpi(playList{exp}(k).question,'no')
+                
+                response.response='';
+                response.correct='';
+                response.rt='';
                 response=askquestion(ws, settings, response,1);
             else
                 response=playList{exp}(k);
             end
             
-            if isfield(playList{exp}(k),'question2')
+            if isfield(playList{exp}(k),'question2') && ~strcmpi(playList{exp}(k).question2,'no')
+                response.response2='';
+                response.correct2='';
+                response.rt2='';
                 response=askquestion(ws, settings, response,2);
             end
             
-            if isfield(playList{exp}(k),'question3')
+            if isfield(playList{exp}(k),'question3')&& ~strcmpi(playList{exp}(k).question3,'no')
+                response.response3='';
+                response.correct3='';
+                response.rt3='';
                 response=askquestion(ws, settings, response,3);
             end
+                        
                         
             %---Save Responses in Response File
             
@@ -218,7 +230,7 @@ while max(nTrials-counter)~=0
             
             
             resultline=struct2cell(response);  % convert structure into cells
-            [nColumns a]=size(resultline);
+            [nColumns, ~]=size(resultline);
             
             output='';
             

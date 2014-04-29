@@ -51,6 +51,8 @@
      if exist('trial.alt3Answer2')
             answer4= trial.alt3Answer2;
      end
+     
+     
  else 
      quText=trial.question3;
      qType=trial.qType3;
@@ -125,7 +127,7 @@
             
             if (strcmp(qType,'mc'))
                 rand_index=randperm(trial.nChoices);
-            else
+            elseif (strcmp(qType,'mcF'))
                 rand_index=1:trial.nChoices;
             end
             
@@ -218,7 +220,7 @@
         % Save results in structure
         if qNumber == 1
             
-            trial.response=num2str(user_answer);
+            trial.response=user_answer;
             trial.correct=num2str(check_answer);
             trial.rt=num2str(resp_time);
         elseif qNumber==2

@@ -3,6 +3,8 @@
 close all
 clear all
 
+clc
+
 addpath('prosodylabscripts');
 
 %
@@ -24,7 +26,7 @@ session{1} = 1;
 instructions{1}='instructions.txt';
 
 session{2} = [1 2 3];
-instructions{2}='instructions.txt'; 
+instructions{2}='instructions.txt';
 
 
 % experimentfiles
@@ -32,142 +34,170 @@ instructions{2}='instructions.txt';
 % only columns that are labeled in the header row will be
 % read into a data structure
 
-item_file{1}='polish1010.txt';
+item_file{1}='doffBlocked.txt';
 item_file{2}='items3.txt';
 item_file{3}='items6.txt';
 %item_file{4}='items5.txt';
 
-% Design
-designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Blocked'};
+% design: Should be specified in column 'design' in experiment spreadsheet
+% There are currently 6 options. 'Blocked' might not fully work yet:
+designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Between' 'Blocked'};
 % decides how the trials will be ordered
 % and whether it's latin square or not
 % options:
-% 1 : Fixed Order (No Randomization):
+% 1 : Fixed (Fixed Order; No Randomization):
 %     Play all trials in the order of spreadsheet
 %     column "condition" and "item" will be ignored
-% 2 : Completely random:
+% 2 : Random (completely random):
 %     Play all trials in random order
 %     column "condition" and "item" will be ignored
-% 3 : Pseudo-random: 
+% 3 : PseudoRandom:
 %     Every condition from every item for each participant
-%     Items aren't repeated more than once (in fact, a repetition of same 
+%     Items aren't repeated more than once (in fact, a repetition of same
 %     item can only happen once per experiment)
 %     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
-% 4 : Pseudo-random, latin square:
+% 4 : LatinSquare:
 %     Only one condition from each item per subject
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
-% 5 : Blocked: 
-%     Each participant see sonly one conditions.
+% 5 : BetweenParticipants
+%     Each participant see sonly one condition.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
+% 6 : Blocked:
+%     Each participant see all conditions.
+%     number of items has to be divisible by number of conditions
+%     There will be as many playlists (=groups of participants)
+%     as there are conditions, which will reflect which condition was run
+%     in the first block
 
-design(1)=3;
-
-% Is a file recorded for a given experiment?
-% Maybe could be in spreadsheet instead
-recordFile(nExperiments)=0;
-recordFile(1)=1;
 
 % Other Settings
 
-    % relevant paths (should be given with final '/'
-    settings.path_items='1_experiment/';
-    settings.path_instructions='1_experiment/';
-    settings.path_stimuli='2_stimuli/';
-    settings.path_contexts='2_contexts/';
-    settings.path_answers='2_answers/';
-    settings.path_results='2_data/';
-    settings.path_soundfiles='2_data/1_soundfiles/';
+% relevant paths (should be given with final '/'
+settings.path_items='1_experiment/';
+settings.path_instructions='1_experiment/';
+settings.path_stimuli='2_stimuli/';
+settings.path_contexts='2_contexts/';
+settings.path_answers='2_answers/';
+settings.path_results='2_data/';
+settings.path_soundfiles='2_data/1_soundfiles/';
 
 
-    % additional column names
-    settings.additionalColNames={'participant','playlist','order','trialN','session'};
+% additional column names
+settings.additionalColNames={'participant','playlist','order','trialN','session'};
 
-    % space between lines in instruction
-    settings.linespace=30;
-    % fontsize
-    settings.textsize = 20;
-    % textwidth
-    settings.textwidth = 120;
+% space between lines in instruction
+settings.linespace=30;
+% fontsize
+settings.textsize = 20;
+% textwidth
+settings.textwidth = 120;
 
-    %
-    % Messages to the Participant
-    %
+%
+% Messages to the Participant
+%
 
-    % you can translate these messges in to Korean. Please leave the commented lines in English, 
-    % so I know which line is which!
+% you can translate these messges in to Korean. Please leave the commented lines in English,
+% so I know which line is which!
 
-    %settings.message ='Read silently. Press any key when you''re ready for the dialogue.';
-    settings.message ='Please read the last line carefully click any key when you''re ready to record!'; 
-    settings.message2 ='Please say the last line out loud now. Press any key when you''re done recording!';
-    settings.message3 ='Press any key when you''re ready for the next set of instructions!';
-    settings.message4 ='Press any key when you''re ready for the next set of instructions!';
-    settings.messageShow='Read silently and make sure you understand the sentences.';
-    
-    %settings.messageThankYou='Thank You!';
-    settings.messageThankYou='Thank You!';
-    
-    settings.messagey=300;
-    settings.messagex=20;
-    
-    settings.contexty=400;
-    settings.contextx=50;
-    
-    settings.texty=600;
-    settings.textx=50;
-    
-    %
-    % Audio Settings
-    %
-   
-    %Input device
-    % You can check which output devices there are
-    % by using the command
-    % devices = PsychPortAudio('GetDevices')
-    %(unnecessary to worry about if you don't want to record sounds)
-    %default outputdevice: use ''
-    %(unnecessary to worry about if you don't want to play sounds)
-    settings.outputdevice=3;
-    settings.inputdevice=1;
-    
-    settings.sampfreq=22050;
-    settings.maxsecs=300;
-    settings.voicetrigger=0;
-   
-    % unify key names across operating systems
-    KbName('UnifyKeyNames');
+%settings.message ='Read silently. Press any key when you''re ready for the dialogue.';
+settings.message ='Please read the sentence silently. Click any key when you''re ready to record!';
+settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
+settings.message3 ='Press any key when you''re ready for the next sentence!';
+settings.message4 ='Press any key when you''re ready for the next sentence!';
 
-    settings.viewing_interval = 2; % in seconds, so .4 = 400ms
-    settings.isi = 1; % inter stimulus interval
- 
-    settings.before_trial_interval = .5;
-    settings.before_prompt_interval = 0;
-    settings.trial_time_limit = 300;
-    settings.experiment_time_limit = 600;
-    settings.num_digits = 2;
-    settings.max_addends = 8;
-    
-    settings.acceptedkeys = {'1!','2@','3#','4$','5%','6^','7&','8*','9(','0)',...
+%settings.messageThankYou='Thank You!';
+settings.messageThankYou='Thank You!';
+
+settings.messagey=300;
+settings.messagex=20;
+
+settings.contexty=400;
+settings.contextx=50;
+
+settings.texty=600;
+settings.textx=50;
+
+%
+% Audio Settings
+%
+
+
+
+% unify key names across operating systems
+KbName('UnifyKeyNames');
+
+settings.viewing_interval = 2; % in seconds, so .4 = 400ms
+settings.isi = 1; % inter stimulus interval
+
+settings.before_trial_interval = .5;
+settings.before_prompt_interval = 0;
+settings.trial_time_limit = 300;
+settings.experiment_time_limit = 600;
+settings.num_digits = 2;
+settings.max_addends = 8;
+
+settings.acceptedkeys = {'1!','2@','3#','4$','5%','6^','7&','8*','9(','0)',...
     'RETURN','DELETE','ESCAPE','ENTER','1','2','3','4','5','6','7',...
     '8','9','0'};
 
+%Input device
+% You can check which output devices there are
+% by using the command
+% devices = PsychPortAudio('GetDevices')
+%(unnecessary to worry about if you don't want to record sounds)
+%default outputdevice: use ''
+%(unnecessary to worry about if you don't want to play sounds)
+settings.outputdevice=5;
+settings.inputdevice=5;
 
-% For dialog-experiments, specify the role of the participant
-% 0 = participantA; 1=participantB
-% role=0;
+settings.sampfreq=22050;
+settings.maxsecs=300;
+settings.voicetrigger=0;
+
+
+% check device numbers for input and output are correct
+devices = PsychPortAudio('GetDevices');
+
+findInput=find([devices.DeviceIndex]==settings.inputdevice);
+findOutput=find([devices.DeviceIndex]==settings.outputdevice);
+
+disp(' ');
+deviceTable=struct2table(devices);
+disp(deviceTable(:,[1 4]));
+
+disp(' ');
+disp('Currently you have selected:');
+disp(' ');
+disp(['input device:  ' num2str(settings.inputdevice) '     '  devices(findInput).DeviceName]);
+disp(['output device:  ' num2str(settings.outputdevice) '     '  devices(findOutput).DeviceName]);
+disp(' ');
+disp('(you can change this number on line 132-133 in code)');
+disp(' ');
+
+while KbCheck(-1); end;
+disp('ok?');
+disp(' ');
+while ~KbCheck(-1); end;
+
+
+[~, ~, keyCode]=KbCheck(-1);
+
+if strcmp('n',KbName(keyCode))
+    error('Ok! Please change device numbers in the script!');
+end
+
 
 %
 %  -------------------------
 %
 
-% clear command window
-clc
+% Read in Experiment Files and Set Up Result Files
 
-% Read in Experiment Files and Set Up Result File
 for i=1:nExperiments
     
     [items{i},columnNames{i}]=tdfimport([settings.path_items item_file{i}]);
@@ -180,8 +210,10 @@ for i=1:nExperiments
         additionalNames=settings.additionalColNames;
         
         % add columnname for recorded file
-        if recordFile(i)
-            additionalNames=[ additionalNames,'recordedFile' ];
+        if isfield(items{i},'record')
+            if ismember('y',unique({items{i}(:).record}))
+                additionalNames=[ additionalNames,'recordedFile' ];
+            end
         end
         
         % add columnnames for participant responses
@@ -211,74 +243,32 @@ for i=1:nExperiments
     end
 end
 
-% check device numbers for input and output are correct
-devices = PsychPortAudio('GetDevices');
-
-findInput=find([devices.DeviceIndex]==settings.inputdevice);
-findOutput=find([devices.DeviceIndex]==settings.outputdevice);
-
-disp(' ');
-%deviceTable=struct2table(devices);
-%disp(deviceTable(:,[1 4]));
-
-disp(' ');
-disp('Currently you have selected:');
-disp(' ');
-disp(['input device:  ' num2str(settings.inputdevice) '     '  devices(findInput).DeviceName]);
-disp(['output device:  ' num2str(settings.outputdevice) '     '  devices(findOutput).DeviceName]);
-disp(' ');
-disp('(you can change this number in the matlab script)');
-disp(' ');
-
-while KbCheck(-1); end;
-disp('ok?');
-while ~KbCheck(-1); end;
-
-
-[~, ~, keyCode]=KbCheck(-1);
-
-if strcmp('n',KbName(keyCode))
-    error('Ok! Please change device numbers in the script!');
-end
 
 
 % Get Participant number
-% check whether particpant has already taken part in experiment 1
-% if not, detemrine plist number
+% check whether particpant has already taken part in any of the experiments
+% and determine plist number participant should be run on
 
 ok=0;
 while ~ok
     participant = input('Please enter the participant number: ', 's');
     
-    [participant ok]=str2num(participant);
+    [participant, ok]=str2num(participant);
     if ok
-        [pList ok]=checkSetup(participant,design,responsesFilename,nExperiments);
+        [pList, ok]=checkSetup(participant,responsesFilename,nExperiments,items);
     end
 end
 
 %Generate randomized list for participant
-[playList, nTrials]=generatePlaylist(items,pList,design,experiments);
-
+[playList, nTrials]=generatePlaylist(items,pList,experiments);
 
 for i=1:nExperiments
     disp(['experiment: ' playList{i}(1).experiment ]);
-    disp(['design: ' designs{design(i)}]);
-    disp(['length: ' num2str(nTrials)]);    
+    disp(['design: ' playList{i}(1).design ]);
+    disp(['length: ' num2str(nTrials(i))]);
+    disp(['pList: ' num2str(pList(i))]);
     disp(['item order: ' num2str([playList{i}(:).item ]) ]);
-    disp(['condition order: ' num2str([ playList{i}(:).condition ] )]);
-end
-
-disp(['type of generated playlist: ']);
-if design(1) == 1
-    disp(['fixed order']);
-elseif design(1) == 2
-    disp(['random']);
-elseif design(1) == 3
-    disp(['pseudo-random']);
-elseif design(1) == 4
-    disp(['latin square']);
-elseif design(1) == 5
-    disp(['blocked']);
+    disp(['condition order: ' num2str([ playList{i}(:).condition ]) ]);
 end
 
 while KbCheck(-1); end;
@@ -288,23 +278,23 @@ while ~KbCheck(-1); end;
 [~, ~, keyCode]=KbCheck(-1);
 
 if strcmp('n',KbName(keyCode))
-    plistchoice=input('Ok! Please change the design number in the script!', 's');
-else
-    for i=1:nSessions
-        % for each session, run RunExp (this includes a practice run)
-        
-        %Set up Screen
-        ws = doScreen(settings);
-        
-        % Making sure font settings are correct
-        Screen('Preference', 'TextRenderer', 1 );
-        Screen('Preference','TextEncodingLocale','UTF-8');
-        Screen('TextSize', ws.ptr, settings.textsize);
-        
-        displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
-        RunExp(session{i}, playList, nTrials, pList, participant, recordFile, responsesFilename, settings, i, ws);
-        
-    end
+    error('Ok! Please change the set up in the script!', 's');
+end
+
+
+for i=1:nSessions
+    % for each session, run RunExp (this includes a practice run)
+    
+    %Set up Screen
+    ws = doScreen(settings);
+    
+    % Making sure font settings are correct
+    Screen('Preference', 'TextRenderer', 1 );
+    Screen('Preference','TextEncodingLocale','UTF-8');
+    Screen('TextSize', ws.ptr, settings.textsize);
+    
+    displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
+    RunExp(session{i}, playList, nTrials, pList, participant, responsesFilename, settings, i, ws);
     
     %Display Thank You Screen
     Screen('TextSize',ws.ptr,60);
