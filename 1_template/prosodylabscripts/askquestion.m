@@ -138,13 +138,11 @@
             elseif trial.nChoices==3
 
                 answer_array={answer1 answer2 answer3};
-                
                 mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2.  ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n\n\n',quText);
        
             else
 
                 answer_array={answer1 answer2 answer3 answer4};
-                
                 mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n', answer_array{rand_index(4)},'\n\n\n',quText);
             
             end
@@ -154,8 +152,12 @@
             %Retrieve user's selection
             [pressed_key resp_time]= getResponseKeypad(accepted_keys,inf);
             pressed_key=str2num(pressed_key);
+            if isempty(pressed_key)
+                pressed_key=0;
+            end
+            
             %Convert number answer to sentence text
-            if pressed_key<min(rand_index)||pressed_key>max(rand_index)
+            if pressed_key<min(rand_index)|pressed_key>max(rand_index)
                 user_answer='';
             else
                 user_answer=answer_array{rand_index(pressed_key)};    
