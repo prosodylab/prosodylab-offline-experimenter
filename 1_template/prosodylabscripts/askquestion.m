@@ -131,22 +131,18 @@
                 rand_index=1:trial.nChoices;
             end
             
-            if trial.nChoices==2
-                    
-                 rand_index=randperm(2);
+            if trial.nChoices==2 
                  answer_array={answer1 answer2};
                  mc_options=strcat(quText,'\n\n\n',' 1.  ',answer_array{rand_index(1)},'\n\n',' 2.  ',answer_array{rand_index(2)});
                  
             elseif trial.nChoices==3
-                
-                rand_index=randperm(3);
+
                 answer_array={answer1 answer2 answer3};
                 
                 mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2.  ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n\n\n',quText);
        
             else
-                
-                rand_index=randperm(4);
+
                 answer_array={answer1 answer2 answer3 answer4};
                 
                 mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n', answer_array{rand_index(4)},'\n\n\n',quText);

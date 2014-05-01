@@ -125,7 +125,7 @@ while max(nTrials-counter)~=0
             end
             
             if isfield(playList{exp}(k),'record')
-                if playList{exp}(k).record=='y'
+               if playList{exp}(k).record=='y'|playList{exp}(k).record=='yes'|playList{exp}(k).record=='Yes'
                 
                 display=1; % If text should vanish during recording, set to 0;
                 
