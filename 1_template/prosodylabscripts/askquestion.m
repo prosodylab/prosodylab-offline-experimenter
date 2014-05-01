@@ -1,4 +1,3 @@
-
  %Ask User Question
         
  %Multiple Choice or Yes/No or Acceptability Judgment
@@ -154,6 +153,7 @@
             %Retrieve user's selection
             [pressed_key resp_time]= getResponseKeypad(accepted_keys,inf);
             pressed_key=str2num(pressed_key);
+            try
             %Convert number answer to sentence text
             if pressed_key<min(rand_index)||pressed_key>max(rand_index)
                 user_answer='';
@@ -162,7 +162,10 @@
             end
             
             check_answer=strcmp(user_answer, correctAnswer);
-            
+            catch
+                user_answer='';
+                check_answer=strcmp(user_answer, correctAnswer);
+            end
             
         elseif (strcmp(qType,'brack'))
             
