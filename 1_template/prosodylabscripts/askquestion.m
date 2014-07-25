@@ -143,7 +143,7 @@
             else
 
                 answer_array={answer1 answer2 answer3 answer4};
-                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n', answer_array{rand_index(3)},'\n', answer_array{rand_index(4)},'\n\n\n',quText);
+                mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n\n','3. ',answer_array{rand_index(3)},'\n\n','4. ',answer_array{rand_index(4)},'\n\n\n',quText);
             
             end
             

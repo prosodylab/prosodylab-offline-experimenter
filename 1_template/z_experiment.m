@@ -10,34 +10,13 @@ addpath('prosodylabscripts');
 %
 % ----- Configuration --------------
 %
-% Experiments of the various experimental sessions:
 
-nExperiments=1;
-experiments=[1:nExperiments];
-
-% If you want to run a practice, the practice experiments should be in
-% session 1, the others in later sessions.
-% If you want more than one experiment in a session, you can specify this
-% as a list: session{1}=[1 2 3];
-% .
-
-nSessions=1;
-session{1} = 1;
-instructions{1}='instructions.txt';
-
-session{2} = [1 2 3];
-instructions{2}='instructions.txt';
-
-
-% experimentfiles
+% item file
 % these should be a tab-separated files
 % only columns that are labeled in the header row will be
 % read into a data structure
 
-item_file{1}='doffBlocked.txt';
-item_file{2}='items3.txt';
-item_file{3}='items6.txt';
-%item_file{4}='items5.txt';
+itemFile='doff.txt';
 
 % design: Should be specified in column 'design' in experiment spreadsheet
 % There are currently 6 options. 'Blocked' might not fully work yet:
@@ -88,7 +67,7 @@ settings.path_soundfiles='2_data/1_soundfiles/';
 
 
 % additional column names
-settings.additionalColNames={'participant','playlist','order','trialN','session'};
+settings.additionalColNames={'participant','playlist','sessionTrial','experimentTrial'};
 
 % space between lines in instruction
 settings.linespace=30;
@@ -125,8 +104,6 @@ settings.textx=50;
 %
 % Audio Settings
 %
-
-
 
 % unify key names across operating systems
 KbName('UnifyKeyNames');
@@ -184,65 +161,99 @@ disp('ok?');
 disp(' ');
 while ~KbCheck(-1); end;
 
-
 [~, ~, keyCode]=KbCheck(-1);
 
 if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
 
-
 %
 %  -------------------------
 %
 
-% Read in Experiment Files and Set Up Result Files
+% Read in itesm and set up experiments and sessions
+
+[allItems,columnNames]=tdfimport([settings.path_items itemFile]);
+
+experimentNames=unique({ allItems.experiment });
+nExperiments=length(experimentNames);
+[items{1:nExperiments}]=deal([]);
+
+% add session column if there is none
+if ~isfield(allItems, 'session')
+    [allItems.session]=deal(1);
+end
+
+
+% set up sessions
+nSessions=max([allItems.session]);
+[sessions{1:nSessions}]=deal([]);
+[instructions{1:nSessions}]=deal([]);
 
 for i=1:nExperiments
     
-    [items{i},columnNames{i}]=tdfimport([settings.path_items item_file{i}]);
+    % create spreadsheet for each experiment
+    items{i}=allItems(strcmp({allItems.experiment},experimentNames(i)));
     
-    % Set up responses File and Generate Playlist
-    responsesFilename{i}=[settings.path_results items{i}(1).experiment '_responses.txt'];
     
-    if ~exist(responsesFilename{i})
-        
-        additionalNames=settings.additionalColNames;
-        
-        % add columnname for recorded file
-        if isfield(items{i},'record')
-            if ismember('y',unique({items{i}(:).record}))
-                additionalNames=[ additionalNames,'recordedFile' ];
-            end
-        end
-        
-        % add columnnames for participant responses
-        if isfield(items{i},'question')
-            additionalNames=[additionalNames ,'response', 'correct', 'rt'];
-            if isfield(items{i},'question2')
-                additionalNames=[ additionalNames ,'response2', 'correct2', 'rt2'];
-                if isfield(items{i},'question3')
-                    additionalNames=[ additionalNames ,'response3', 'correct3', 'rt3'];
-                end
-            end
-            
-        end
-        
-        % add columnname for end time
-        additionalNames = [additionalNames, 'trialDuration','date','trialStart','trialEnd'];
-        
-        additionalNames=sprintf('%s\t',additionalNames{:});
-        
-        columnNames{i}=sprintf('%s\t',columnNames{i}{:});
-        columnNames{i}=[columnNames{i} additionalNames];
-        
-        %write column headers to new response file
-        fid = fopen(responsesFilename{i},'a','l', 'UTF-8');  %open file and appending
-        fprintf(fid,'%s\n',columnNames{i});
-        fclose(fid);  %close file
+    % add experiment to session
+    eSession=unique([items{i}.session]);
+    if length(eSession)>1
+        error(['Experiment ' experimentNames(i) ' has more than one session specified'])
     end
+    sessions{eSession}=[sessions{eSession} i];
 end
 
+for i=1:nSessions
+    allSession=allItems([allItems.session]==i);
+    if length(unique({allSession.instructions}))>1
+        error(['Session ' num2str(i) ' has more than one set of instructions specified.'])
+    elseif isempty(unique({allSession.instructions}))
+        error(['Session' num2str(i) ' has no instructions specified'])
+    end
+    instructions(i)=unique({allSession.instructions});
+end
+
+% Set up responses File and Generate Playlists
+
+responsesFilename=[settings.path_results strjoin(experimentNames,'_') '_responses.txt'];
+
+if ~exist(responsesFilename,'file')
+    
+    additionalNames=settings.additionalColNames;
+    
+    % add columnname for recorded file
+    if isfield(items{i},'record')
+        if ismember('y',unique({items{i}(:).record}))
+            additionalNames=[ additionalNames,'recordedFile' ];
+        end
+    end
+    
+    % add columnnames for participant responses for each question
+    if isfield(items{i},'question')
+        additionalNames=[additionalNames ,'response', 'correct', 'rt'];
+        if isfield(items{i},'question2')
+            additionalNames=[ additionalNames ,'response2', 'correct2', 'rt2'];
+            if isfield(items{i},'question3')
+                additionalNames=[ additionalNames ,'response3', 'correct3', 'rt3'];
+            end
+        end
+        
+    end
+    
+    % add columnname for end time
+    additionalNames = [additionalNames, 'trialDuration','date','trialStart','trialEnd'];
+    
+    additionalNames=sprintf('%s\t',additionalNames{:});
+    
+    columnNames=strjoin(columnNames,'\t');
+    columnNames=strjoin({columnNames,additionalNames},'\t');
+    
+    %write column headers to new response file
+    fid = fopen(responsesFilename,'a','l', 'UTF-8');  %open file and appending
+    fprintf(fid,'%s\n',columnNames);
+    fclose(fid);  %close file
+end
 
 
 % Get Participant number
@@ -255,38 +266,57 @@ while ~ok
     
     [participant, ok]=str2num(participant);
     if ok
-        [pList, ok]=checkSetup(participant,responsesFilename,nExperiments,items);
+        [pList, ok]=checkSetup(participant,responsesFilename,experimentNames,items);
     end
 end
 
 %Generate randomized list for participant
-[playList, nTrials]=generatePlaylist(items,pList,experiments);
-
-for i=1:nExperiments
-    disp(['experiment: ' playList{i}(1).experiment ]);
-    disp(['design: ' playList{i}(1).design ]);
-    disp(['length: ' num2str(nTrials(i))]);
-    disp(['pList: ' num2str(pList(i))]);
-    disp(['item order: ' num2str([playList{i}(:).item ]) ]);
-    disp(['condition order: ' num2str([ playList{i}(:).condition ]) ]);
-end
-
-while KbCheck(-1); end;
-disp('ok?');
-while ~KbCheck(-1); end;
-
-[~, ~, keyCode]=KbCheck(-1);
-
-if strcmp('n',KbName(keyCode))
-    error('Ok! Please change the set up in the script!', 's');
-end
+[playList, nTrials]=generatePlaylist(items,pList,experimentNames);
 
 
+% output design of experiment for confirmation
 for i=1:nSessions
-    % for each session, run RunExp (this includes a practice run)
     
-    %Set up Screen
-    ws = doScreen(settings);
+    disp(' ');
+    disp(['Session: ' num2str(i)]);
+    disp(' ');
+    
+    for j=1:length(sessions{i})
+        exper=sessions{i}(j);
+        
+        disp(' ');
+        disp(['Experiment: ' playList{exper}(1).experiment ]);
+        disp(['Design: ' playList{exper}(1).design [' Playlist: ' num2str(pList(exper))] ]);
+        disp(['Length: ' num2str(nTrials(exper)) ' Number Items: ' num2str(max([playList{exper}(:).item ])) ' Number Conditions: ' num2str(max([playList{exper}(:).condition ]))]);
+        disp('');
+        disp(['item order: ' num2str([playList{exper}(:).item ]) ]);
+        disp(['condition order: ' num2str([ playList{exper}(:).condition ]) ]);
+        disp('');
+        
+    end
+    
+    while KbCheck(-1); end;
+    disp('ok?');
+    while ~KbCheck(-1); end;
+    
+    [~, ~, keyCode]=KbCheck(-1);
+    
+    if strcmp('n',KbName(keyCode))
+        error('Ok! Please change the set up in the script!');
+    end
+    
+end
+
+
+%Set up Screen
+ws = doScreen(settings);
+
+
+% Run Experiment
+for i=1:nSessions
+    % for each session, run RunExp
+    
+    
     
     % Making sure font settings are correct
     Screen('Preference', 'TextRenderer', 1 );
@@ -294,13 +324,12 @@ for i=1:nSessions
     Screen('TextSize', ws.ptr, settings.textsize);
     
     displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
-    RunExp(session{i}, playList, nTrials, pList, participant, responsesFilename, settings, i, ws);
+    RunSession(i,sessions{i}, playList, nTrials, pList, participant, responsesFilename, settings, ws);
     
-    %Display Thank You Screen
-    Screen('TextSize',ws.ptr,60);
-    drawText('Thank You!',ws,1);
-    
-    %ListenChar(0);
 end
+
+%Display Thank You Screen
+Screen('TextSize',ws.ptr,60);
+drawText('Thank You!',ws,1);
 
 clear screen

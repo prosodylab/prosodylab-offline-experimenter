@@ -3,10 +3,11 @@ function displayInstructions(ws,filename,settings)
 
 Screen('TextSize',ws.ptr,settings.textsize);
 
+
 fid = fopen(filename,'r', 'l', 'UTF-8');
 
 if fid==-1
-    error('Experimentfile file was not found, please verify file name');
+    error('Instructions file was not found, please verify file name');
 end
 
 linecounter=0;

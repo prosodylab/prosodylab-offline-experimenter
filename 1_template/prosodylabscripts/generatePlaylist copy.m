@@ -40,34 +40,35 @@ nExperiments=length(unique(experimentNames));
 
 for k=1:nExperiments
     
-    exper=k;
+    exp=k;
     trial=0;
-    design=items{exper}(1).design;
+    design=items{exp}(1).design;
     
     if strcmp(design,'Fixed')
-        playList{exper}=items{exper};
-        [~,elength]=size(playList{exper});
-        nTrials(exper)=elength;
+        playList{exp}=items{exp};
+        [~,elength]=size(playList{exp});
+        nTrials(exp)=elength;
         
     elseif strcmp(design,'Random')
-        playList{exper}=items{exper};
+        playList{exp}=items{exp};
         % All trials, completely random order
-        [~,elength]=size(playList{exper});
-        nTrials(exper)=elength;
+        [~,elength]=size(playList{exp});
+        nTrials(exp)=elength;
         % Randomize Order
         rTrial=randperm(elength);
         for i=1:elength
-            newList(i)=playList{exper}(rTrial(i));
+            newList(i)=playList{exp}(rTrial(i));
         end
-        playList{exper}=newlist;
+        playList{exp}=newlist;
         
     elseif strcmp(design,'PseudoRandom')
         % Pseudo-Random, Each Condition from Each Item for Each Participant
         % each block like latin square design with one condition from each
         % item; blocks are ordered according to pList (should be balanced
         % across participants).
-        nItems=max([items{exper}(:).item]);
-        nConditions=max([items{exper}(:).condition]);
+        nItems=max([items{exp}(:).item]);
+        nConditions=max([items{exp}(:).condition]);
+        newlist=struct;
         
         if round(nItems/nConditions)~=nItems/nConditions
             error(['For design ' design ', number of items (' num2str(nItems) ') has to be divisible by number of conditions(' num2str(nConditions) ')!']);
@@ -101,7 +102,7 @@ for k=1:nExperiments
                     %select trial (=row in spreadsheet) based on condition
                     %and item
                     index=selectItem*nConditions-selectCondition+1;
-                    playList{exper}(trial)=items{exper}(index);
+                    playList{exp}(trial)=items{exp}(index);
                 end
             end
         end
@@ -109,40 +110,38 @@ for k=1:nExperiments
         % Randomize the order of Blocks within Each PlayList
         rBlock=randperm(nBlocks);
         counter=0;
-        newlist=items{exper}(1);
         for h=1:nConditions
             for i=1:nBlocks
                 for j=1:nConditions
                     counter=counter+1;
-                    newlist(counter)=playList{exper}((h-1)*nItems+(rBlock(i)-1)*nConditions+j);
+                    newlist(counter)=playList{exp}((h-1)*nItems+(rBlock(i)-1)*nConditions+j);
                     
                 end
             end
         end
-        playList{exper}=newlist;
+        playList{exp}=newlist;
         
         % Randomize the order of Conditions Within each Block of Trials Within Each PlayList
         nBlocks=nItems/nConditions;
         counter=0;
-        newlist=items{exper}(1);
         for h=1:nConditions
             for i=1:nBlocks
                 rCondition=randperm(nConditions);
                 for j=1:nConditions
                     counter=counter+1;
-                    newlist(counter)=playList{exper}((h-1)*nItems+(i-1)*nConditions+rCondition(j));
+                    newlist(counter)=playList{exp}((h-1)*nItems+(i-1)*nConditions+rCondition(j));
                 end
             end
         end
-        playList{exper}=newlist;
-        nTrials(exper)=nConditions*nItems;
+        playList{exp}=newlist;
+        nTrials(exp)=nConditions*nItems;
         
         
     elseif strcmp(design,'LatinSquare')
         % Latin Square: One condition from each item for each participant
             
-        nItems=max([items{exper}(:).item]);
-        nConditions=max([items{exper}(:).condition]);
+        nItems=max([items{exp}(:).item]);
+        nConditions=max([items{exp}(:).condition]);
         
         %
         nBlocks=nItems/nConditions;
@@ -156,7 +155,7 @@ for k=1:nExperiments
                 trial=trial+1;
                 %select Condition
                 conditionSelector=(j-1)*nConditions+i;
-                selectCondition = conditionSelector+pList(exper)+1-nConditions*(floor((conditionSelector+pList(exper)+1)/nConditions))+1;
+                selectCondition = conditionSelector+pList(exp)+1-nConditions*(floor((conditionSelector+pList(exp)+1)/nConditions))+1;
                 %select item
                 selectItem=(j-1)*nConditions+i;
                 selectItem=selectItem+(itemDistance*nConditions*(i-1));
@@ -164,97 +163,93 @@ for k=1:nExperiments
                 %select trial (=row in spreadsheet) based on condition
                 %and item
                 index=selectItem*nConditions-selectCondition+1;
-                playList{exper}(trial)=items{exper}(index);
+                playList{exp}(trial)=items{exp}(index);
             end
         end
         
         % Randomize the order of Blocks within Each PlayList
         rBlock=randperm(nBlocks);
         trial=0;
-        newlist=items{exper}(1);
         for i=1:nBlocks
             for j=1:nConditions
                 trial=trial+1;
-                newlist(trial)=playList{exper}((rBlock(i)-1)*nConditions+j);
+                newlist(trial)=playList{exp}((rBlock(i)-1)*nConditions+j);
             end
         end
-        playList{exper}=newlist;
+        playList{exp}=newlist;
         
         
         % Randomize the order of Conditions Within each Block of Trials Within Each PlayList
         trial=0;
-        newlist=items{exper}(1);
         for i=1:nBlocks
             rCondition=randperm(nConditions);
             for j=1:nConditions
                 trial=trial+1;
-                newlist(trial)=playList{exper}((i-1)*nConditions+rCondition(j));
+                newlist(trial)=playList{exp}((i-1)*nConditions+rCondition(j));
             end
         end
         
-        playList{exper}=newlist;
-        nTrials(exper)=nItems;
+        playList{exp}=newlist;
+        nTrials(exp)=nItems;
         
         
     elseif strcmp(design,'Between')
         %Between: Every subject sees only one condition
         
-        nItems=max([items{exper}(:).item]);
-        nConditions=max([items{exper}(:).condition]);
+        nItems=max([items{exp}(:).item]);
+        nConditions=max([items{exp}(:).condition]);
         
         %Loop through items
         for i=1:nItems
-            selectCondition=pList(exper);
+            selectCondition=pList(exp);
             selectItem=i-1;
             index=selectItem*nConditions+selectCondition;
-            playList{exper}(i)=items{exper}(index);
+            playList{exp}(i)=items{exp}(index);
         end
         
         rTrial=randperm(nItems);
-        newlist=items{exper}(1);
         for i=1:nItems
-            newList(i)=playList{exper}(rTrial(i));
+            newList(i)=playList{exp}(rTrial(i));
         end
         
-        playList{exper}=newList;
-        nTrials(exper)=nItems;
+        playList{exp}=newList;
+        nTrials(exp)=nItems;
         
     elseif strcmp(design,'Blocked')
         %Blocked: Every subject sees all conditions, but in separate
         %consecutive blocks (blocks in random order)
         
-        nItems=max([items{exper}(:).item]);
-        nConditions=max([items{exper}(:).condition]);
+        nItems=max([items{exp}(:).item]);
+        nConditions=max([items{exp}(:).condition]);
         
         %Loop through items
         for j=1:nConditions
-            selectCondition=mod(j+pList(exper)-1,nConditions)+1;
+            selectCondition=mod(j+pList(exp)-1,nConditions)+1;
             for i=1:nItems
                 selectItem=i;
                 trial=(j-1)*nItems+i;
                 index=selectItem*nConditions-selectCondition+1;
-                playList{exper}(trial)=items{exper}(index);
+                playList{exp}(trial)=items{exp}(index);
             end
         end
         
         rCond=0;
-        while rCond~=pList(exper)
+        while rCond~=pList(exp)
             rCond=randperm(nConditions);
         end
         
-        newlist=items{exper}(1);
         for j=1:nConditions
             selectCondition=rCond(j);
             rTrial=randperm(nItems);
             for i=1:nItems
                 newTrial=(j-1)*nItems+i;
                 trial=(selectCondition-1)*nItems+rTrial(i);
-                newList(newTrial)=playList{exper}(trial);
+                newList(newTrial)=playList{exp}(trial);
             end
         end
         
-        playList{exper}=newList;
-        nTrials(exper)=nConditions*nItems;
+        playList{exp}=newList;
+        nTrials(exp)=nConditions*nItems;
         
     else
         error(['design: ' num2str(design) 'is  unknown!'])

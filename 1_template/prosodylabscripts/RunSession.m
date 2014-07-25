@@ -1,32 +1,28 @@
-function []=RunExp(experiments,playList,nTrials,pList,participant,responsesFilename,settings,session,ws)
-
-[~,nexp]=size(experiments);
+function []=RunSession(sessionNumber,session, playList,nTrials,pList,participant,responsesFilename,settings,ws)
 
 
 %
-%
-% Experiment
-%
+% Run an Experimental Session
 %
 %
 
-
-% if there are separate instructions for this part
-% displayInstructions(ws, [ path_instructions 'instructionsPart1.txt'],settings);
-
+nexp=length(session);
 counter(1:nexp)=0;
 trialN=0;
 
+maxTrials=max(nTrials(session));
+
 % Main loop for the session
-while max(nTrials-counter)~=0
+while max(maxTrials-counter)~=0
     
     % run through one trial from each experiment
     for i=1:nexp
-        
-        exp=experiments(i);
-        
+         
+        exper=session(i);
+        % =find(strcmp({experimentNames{:}}, expname));
+
         % the condition after & shouldn't be there after other experiments
-        if counter(exp)<nTrials(exp)
+        if counter(i)<nTrials(session(i))
             
             if trialN ~= 0
                 askReady(ws,double(settings.message3),settings);
@@ -34,25 +30,25 @@ while max(nTrials-counter)~=0
             
             trialN=trialN+1;
             
-            counter(exp)=counter(exp)+1;
-            k=counter(exp);
+            counter(i)=counter(i)+1;
+            k=counter(i);
             
             % add information about participant
-            playList{exp}(k).participant=participant;
-            playList{exp}(k).playList=pList(exp);
-            playList{exp}(k).order=counter(exp);
-            playList{exp}(k).nTrial=trialN;
-            playList{exp}(k).session=session;
+            playList{exper}(k).participant=participant;
+            playList{exper}(k).playList=pList(exper);
+            playList{exper}(k).sessionTrial=counter(i);
+            playList{exper}(k).experimentTrial=trialN;
+            playList{exper}(k).session=sessionNumber;
             todaysdate=num2str(date);
             starttime=num2str(datestr(now,13));
             
             %1-Display sentence to user
-            if isfield(playList{exp}(k),'text')
-                text= [ playList{exp}(k).text ];
-                if isfield(playList{exp}(k),'text2')
-                    text=[text '\n\n' playList{exp}(k).text2 ];
-                    if isfield(playList{exp}(k),'text3')
-                        text= [text '\n\n' playList{exp}(k).text3 ];
+            if isfield(playList{exper}(k),'text')
+                text= [ playList{exper}(k).text ];
+                if isfield(playList{exper}(k),'text2')
+                    text=[text '\n\n' playList{exper}(k).text2 ];
+                    if isfield(playList{exper}(k),'text3')
+                        text= [text '\n\n' playList{exper}(k).text3 ];
                     end
                 end
             else
@@ -61,14 +57,14 @@ while max(nTrials-counter)~=0
             
             context=[];
             
-            if isfield(playList{exp}(k),'setup')
-                context=[ '[' playList{exp}(k).setup ']'];
+            if isfield(playList{exper}(k),'setup')
+                context=[ '[' playList{exper}(k).setup ']'];
             else
                 context=[];
             end
             
-            if isfield(playList{exp}(k),'context')
-                context=[ context '\n\n' playList{exp}(k).context ];
+            if isfield(playList{exper}(k),'context')
+                context=[ context '\n\n' playList{exper}(k).context ];
             else
                 context=[];
             end
@@ -77,28 +73,28 @@ while max(nTrials-counter)~=0
             
             % Check whether a soundfile should be played
             
-            if isfield(playList{exp}(k),'contextFile')
-                contextFile=[ settings.path_contexts playList{exp}(k).contextFile];
+            if isfield(playList{exper}(k),'contextFile')
+                contextFile=[ settings.path_contexts playList{exper}(k).contextFile];
             else
                 contextFile=[];
             end
             
-            if isfield(playList{exp}(k), 'answerFile')
-                answerFile = [settings.path_answers playList{exp}(k).answerFile];
+            if isfield(playList{exper}(k), 'answerFile')
+                answerFile = [settings.path_answers playList{exper}(k).answerFile];
             else
                 answerFile=[];
             end
             
-            if isfield(playList{exp}(k), 'answerFile2')
-                answerFile2 = [settings.path_answers playList{exp}(k).answerFile2];
+            if isfield(playList{exper}(k), 'answerFile2')
+                answerFile2 = [settings.path_answers playList{exper}(k).answerFile2];
             else
                 answerFile2 = [];
             end
             
             
             
-            if isfield(playList{exp}(k),'labtext')
-                labtext=playList{exp}(k).labtext;
+            if isfield(playList{exper}(k),'labtext')
+                labtext=playList{exper}(k).labtext;
             else
                 labtext=text;
             end
@@ -124,8 +120,8 @@ while max(nTrials-counter)~=0
                 playSound(contextFile, settings);    
             end
             
-            if isfield(playList{exp}(k),'record')
-               if playList{exp}(k).record=='y'|playList{exp}(k).record=='yes'|playList{exp}(k).record=='Yes'
+            if isfield(playList{exper}(k),'record')
+               if playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
                 
                 display=1; % If text should vanish during recording, set to 0;
                 
@@ -151,12 +147,12 @@ while max(nTrials-counter)~=0
                 [recordedaudio]=RecordSound(settings, ws);
                 
                 %Construct wave file name
-                wavfilename=[playList{exp}(k).experiment '_'...
-                    num2str(playList{exp}(k).participant) '_' ...
-                    num2str(playList{exp}(k).item) '_' ...
-                    num2str(playList{exp}(k).condition) '.wav'];
+                wavfilename=[playList{exper}(k).experiment '_'...
+                    num2str(playList{exper}(k).participant) '_' ...
+                    num2str(playList{exper}(k).item) '_' ...
+                    num2str(playList{exper}(k).condition) '.wav'];
                 
-                playList{exp}(k).recordedFile=wavfilename;
+                playList{exper}(k).recordedFile=wavfilename;
                 
                 wavfilename=[settings.path_soundfiles wavfilename];
                 
@@ -165,10 +161,10 @@ while max(nTrials-counter)~=0
                 %Save .lab file
                 
                 %Construct .lab file name
-                labfilename=[settings.path_soundfiles,playList{i}(k).experiment...
-                    '_' num2str(playList{i}(k).participant)...
-                    '_' num2str(playList{i}(k).item)...
-                    '_' num2str(playList{i}(k).condition) '.lab'];
+                labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                    '_' num2str(playList{exper}(k).participant)...
+                    '_' num2str(playList{exper}(k).item)...
+                    '_' num2str(playList{exper}(k).condition) '.lab'];
                 
                 fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
                 fprintf(fid,'%s\n',labtext);  %print item text to file
@@ -190,29 +186,29 @@ while max(nTrials-counter)~=0
             end
             
             
-            response=playList{exp}(k);
+            response=playList{exper}(k);
             
              % Ask Questions if there are any
 
             %check that contents of field question ~= "no".
-            if isfield(playList{exp}(k),'question') && ~strcmpi(playList{exp}(k).question,'no')
+            if isfield(playList{exper}(k),'question') && ~strcmpi(playList{exper}(k).question,'no')
                 
                 response.response='';
                 response.correct='';
                 response.rt='';
                 response=askquestion(ws, settings, response,1);
             else
-                response=playList{exp}(k);
+                response=playList{exper}(k);
             end
             
-            if isfield(playList{exp}(k),'question2') && ~strcmpi(playList{exp}(k).question2,'no')
+            if isfield(playList{exper}(k),'question2') && ~strcmpi(playList{exper}(k).question2,'no')
                 response.response2='';
                 response.correct2='';
                 response.rt2='';
                 response=askquestion(ws, settings, response,2);
             end
             
-            if isfield(playList{exp}(k),'question3')&& ~strcmpi(playList{exp}(k).question3,'no')
+            if isfield(playList{exper}(k),'question3')&& ~strcmpi(playList{exper}(k).question3,'no')
                 response.response3='';
                 response.correct3='';
                 response.rt3='';
@@ -239,7 +235,7 @@ while max(nTrials-counter)~=0
             end
             
             %save response
-            fid = fopen(responsesFilename{exp},'a','l', 'UTF-8');  %open file and appending
+            fid = fopen(responsesFilename,'a','l', 'UTF-8');  %open file and appending
             fprintf(fid,'%s\n',output);
             fclose(fid);  %close file
         end
