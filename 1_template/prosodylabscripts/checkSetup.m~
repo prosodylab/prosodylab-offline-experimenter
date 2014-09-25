@@ -4,36 +4,33 @@
 
 function [pList, ok]=checkSetup(participant,responsesFilename,experimentNames,items)
 
+pList=1;
+
 [allResults]=tdfimport(responsesFilename);
 [~,rows]=size(allResults);
 
-ok=0
-
-
-   ok=~(any(ismember([results(:).participant],participant)));
-   if ~ok
-                disp(sprintf(['There is already a participant with that number for experiment ' results(j).experiment '!']));
-   end
-   
-end
-            
-nExperiments=length(unique(experimentNames));
-ok = 1;
-pList(1:nExperiments)=1;
-
-if rows > 1
+ok=~(any(ismember([allResults(:).participant],participant)));
+if ~ok
+    disp(sprintf(['There is already a participant with that number!']));
+else
     
-    for j=1:nExperiments
+    nExperiments=length(unique(experimentNames));
+    ok = 1;
+    pList(1:nExperiments)=1;
+    
+    if rows > 1
         
-        nPart=[];
-        
-        results=allResults(strcmp({allResults.experiment},experimentNames(j)));
-        
-        [~, nTrials]=size(results);
-        
-        if nTrials~=0
+        for j=1:nExperiments
             
+            nPart=[];
             
+            results=allResults(strcmp({allResults.experiment},experimentNames(j)));
+            
+            [~, nTrials]=size(results);
+            
+            if nTrials~=0
+                
+                
                 
                 % plists are kept track of for designs 3-6
                 
@@ -48,11 +45,11 @@ if rows > 1
                     maxTrial=nCond*nItem;
                 end
                 
-                 if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'PseudoRandom')||strcmp(design,'Blocked')
+                if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'PseudoRandom')||strcmp(design,'Blocked')
                     plistsToBeRun = 1:nCond;
-                 else
-                     plistsToBeRun = 1;
-                 end
+                else
+                    plistsToBeRun = 1;
+                end
                 
                 allTrials=[results(:).experimentTrial];
                 completeRuns=allTrials==maxTrial;
@@ -99,9 +96,8 @@ if rows > 1
                 end
                 
                 
-     
-            
+            end
         end
     end
-    
+end
 end
