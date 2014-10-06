@@ -56,6 +56,10 @@ designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Between' 'Blocked'};
 
 % Other Settings
 
+% randomize order of experiments within a session if there are multiple
+% ones
+randomizeOrderExperiments=true;
+
 % relevant paths (should be given with final '/'
 settings.path_items='1_experiment/';
 settings.path_instructions='1_experiment/';
@@ -67,7 +71,7 @@ settings.path_soundfiles='2_data/1_soundfiles/';
 
 
 % additional column names
-settings.additionalColNames={'participant','playlist','sessionTrial','experimentTrial'};
+settings.additionalColNames={'participant','playlist','experimentTrial','sessionTrial'};
 
 % space between lines in instruction
 settings.linespace=30;
@@ -184,25 +188,38 @@ if ~isfield(allItems, 'session')
     [allItems.session]=deal(1);
 end
 
+% add default instructions file name if there isn't one specified
+if ~isfield(allItems, 'instructions')
+    [allItems.session]=deal('instructions.txt');
+end
 
 % set up sessions
 nSessions=max([allItems.session]);
 [sessions{1:nSessions}]=deal([]);
 [instructions{1:nSessions}]=deal([]);
 
+% randomize order of experiments within a session
+if randomizeOrderExperiments
+    exOrder=randperm(nExperiments);
+else
+    exOrder=1:nExperiments;
+end
+
+% assign experiments to session
 for i=1:nExperiments
     
     % create spreadsheet for each experiment
-    items{i}=allItems(strcmp({allItems.experiment},experimentNames(i)));
+    items{exOrder(i)}=allItems(strcmp({allItems.experiment},experimentNames(exOrder(i))));
     
     
     % add experiment to session
-    eSession=unique([items{i}.session]);
+    eSession=unique([items{exOrder(i)}.session]);
     if length(eSession)>1
-        error(['Experiment ' experimentNames(i) ' has more than one session specified'])
+        error(['Experiment ' experimentNames(exOrder(i)) ' has more than one session specified'])
     end
-    sessions{eSession}=[sessions{eSession} i];
+    sessions{eSession}=[sessions{eSession} exOrder(i)];
 end
+
 
 for i=1:nSessions
     allSession=allItems([allItems.session]==i);

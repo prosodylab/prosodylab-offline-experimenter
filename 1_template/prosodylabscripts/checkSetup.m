@@ -28,8 +28,6 @@ if rows ~= 0
                 
                 if nTrials~=0
                     
-                    
-                    
                     % plists are kept track of for designs 3-6
                     
                     design=items{j}(1).design;
@@ -58,9 +56,11 @@ if rows ~= 0
                     assignments = histc(listsSofar,plistsToBeRun);
                     maxList=max(plistsAlreadyRun);
                     
+                    
+                    
                     if maxList>nCond
                         error('\n%s\n','Problem with PlayList Column in Responses File--a playlist out of range is recorded in responses file!');
-                    elseif completeRuns~=0
+                    elseif sum(completeRuns)~=0
                         [~, minPlist]=min(assignments);
                         pList(j)=minPlist;
                     else
