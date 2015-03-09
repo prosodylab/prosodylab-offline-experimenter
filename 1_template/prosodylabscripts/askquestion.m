@@ -87,8 +87,6 @@ else
 end
 
 
-accepted_keys=settings.acceptedkeys;
-
 if (strcmp(qType,'yn'))
     %yes/no question
     
@@ -99,7 +97,7 @@ if (strcmp(qType,'yn'))
     Screen('DrawText', ws.ptr, double(QuText),50,settings.messageheight);
     
     Screen('Flip',ws.ptr);
-    [pressed_key resp_time] = getKeyResponse(accepted_keys,inf);
+    [pressed_key resp_time] = getKeyResponse(settings.acceptedkeys,inf);
     
     if length(pressed_key)>1
         pressed_key=pressed_key(1);

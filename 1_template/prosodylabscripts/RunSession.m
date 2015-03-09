@@ -17,10 +17,10 @@ while max(maxTrials-counter)~=0
     
     % run through one trial from each experiment
     for i=1:nexp
-         
+        
         exper=session(i);
         % =find(strcmp({experimentNames{:}}, expname));
-
+        
         % the condition after & shouldn't be there after other experiments
         if counter(i)<nTrials(session(i))
             
@@ -69,7 +69,7 @@ while max(maxTrials-counter)~=0
                 context=[];
             end
             
-           
+            
             
             % Check whether a soundfile should be played
             
@@ -99,97 +99,132 @@ while max(maxTrials-counter)~=0
                 labtext=text;
             end
             
+            if isfield(playList{exper}(k),'retrial')
+                retrial=playList{exper}(k).retrial;
+            else
+                retrial='n';
+            end
+            
             
             %---Display Text
             
             tic;
             
-            while KbCheck([-1]); end;
-            
-            DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
-            DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
-            DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
-            
-            
-            Screen('Flip',ws.ptr);
-            
-            while ~KbCheck([-1]); end;
-            
-            
-            if ~isempty(contextFile) 
-                playSound(contextFile, settings);    
-            end
-            
-            if isfield(playList{exper}(k),'record')
-               if playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
+            while true
                 
-                display=1; % If text should vanish during recording, set to 0;
+                while KbCheck([-1]); end;
                 
-                % show text and context if 'display' is set to true
+                DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+                DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
+                DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
                 
-                if ~isempty(ws)
-                    
-                    if display
-                        DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
-                        DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
-                        DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
+                
+                Screen('Flip',ws.ptr);
+                
+                while ~KbCheck([-1]); end;
+                
+                
+                if ~isempty(contextFile)
+                    playSound(contextFile, settings);
+                end
+                
+                if isfield(playList{exper}(k),'record')
+                    if playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
                         
-                        Screen('Flip',ws.ptr);
-                    else
-                        Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
-                        Screen('Flip',ws.ptr);
+                        display=1; % If text should vanish during recording, set to 0;
+                        
+                        % show text and context if 'display' is set to true
+                        
+                        if ~isempty(ws)
+                            
+                            if display
+                                DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
+                                DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
+                                DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
+                                
+                                Screen('Flip',ws.ptr);
+                            else
+                                Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
+                                Screen('Flip',ws.ptr);
+                            end
+                        end
+                        
+                        % records files --> we don't want to record we want to play
+                        % files
+                        
+                        [recordedaudio]=RecordSound(settings, ws);
+                        
+                        %Construct wave file name
+                        wavfilename=[playList{exper}(k).experiment '_'...
+                            num2str(playList{exper}(k).participant) '_' ...
+                            num2str(playList{exper}(k).item) '_' ...
+                            num2str(playList{exper}(k).condition) '.wav'];
+                        
+                        playList{exper}(k).recordedFile=wavfilename;
+                        
+                        wavfilename=[settings.path_soundfiles wavfilename];
+                        
+                        wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
+                        
+                        %Save .lab file
+                        
+                        %Construct .lab file name
+                        labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                            '_' num2str(playList{exper}(k).participant)...
+                            '_' num2str(playList{exper}(k).item)...
+                            '_' num2str(playList{exper}(k).condition) '.lab'];
+                        
+                        fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
+                        fprintf(fid,'%s\n',labtext);  %print item text to file
+                        fclose(fid);  %close file
+                        
                     end
-                end
-                
-                % records files --> we don't want to record we want to play
-                % files
-                
-                [recordedaudio]=RecordSound(settings, ws);
-                
-                %Construct wave file name
-                wavfilename=[playList{exper}(k).experiment '_'...
-                    num2str(playList{exper}(k).participant) '_' ...
-                    num2str(playList{exper}(k).item) '_' ...
-                    num2str(playList{exper}(k).condition) '.wav'];
-                
-                playList{exper}(k).recordedFile=wavfilename;
-                
-                wavfilename=[settings.path_soundfiles wavfilename];
-                
-                wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
-                
-                %Save .lab file
-                
-                %Construct .lab file name
-                labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
-                    '_' num2str(playList{exper}(k).participant)...
-                    '_' num2str(playList{exper}(k).item)...
-                    '_' num2str(playList{exper}(k).condition) '.lab'];
-                
-                fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
-                fprintf(fid,'%s\n',labtext);  %print item text to file
-                fclose(fid);  %close file
-                
-                end
-            else
-                if  ~isempty(answerFile)
-                    WaitSecs(0.5);
-                    playSound(answerFile, settings);
-                end
-                
-                if ~isempty(answerFile2)
-                    WaitSecs(0.5);
-                    playSound(answerFile2, settings);
+                else
+                    if  ~isempty(answerFile)
+                        WaitSecs(0.5);
+                        playSound(answerFile, settings);
+                    end
+                    
+                    if ~isempty(answerFile2)
+                        WaitSecs(0.5);
+                        playSound(answerFile2, settings);
+                    end
+                    
+                    
                 end
                 
                 
+                if retrial=='y'
+                    
+                    DrawFormattedText(ws.ptr, double(settings.retrialMessage),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
+                    Screen('Flip',ws.ptr);
+                    
+                    [pressed_key, resp_time]= getResponseKeypad({'y','n'},inf);
+                    
+                    if length(pressed_key)>1
+                        pressed_key=pressed_key(1);
+                    end
+                    
+                    if isempty(pressed_key)
+                        pressed_key=0;
+                    end
+                    
+                    retrial=pressed_key;
+                    
+                    while ~KbCheck([-1]); end;
+                end
+                
+                if strcmp(retrial,'n')
+                    break;
+                else
+                    askReady(ws,double(settings.retrialMessage2),settings);
+                end
             end
-            
             
             response=playList{exper}(k);
             
-             % Ask Questions if there are any
-
+            % Ask Questions if there are any
+            
             %check that contents of field question ~= "no".
             if isfield(playList{exper}(k),'question') && ~strcmpi(playList{exper}(k).question,'no')
                 
@@ -214,11 +249,11 @@ while max(maxTrials-counter)~=0
                 response.rt3='';
                 response=askquestion(ws, settings, response,3);
             end
-                        
-                        
+            
+            
             %---Save Responses in Response File
             
-  
+            
             response.trialDuration=toc;
             response.date=todaysdate;
             response.trialStart=starttime;

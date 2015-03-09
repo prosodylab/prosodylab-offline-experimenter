@@ -92,6 +92,8 @@ settings.message ='Please read the sentence silently. Click any key when you''re
 settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
 settings.message3 ='Press any key when you''re ready for the next sentence!';
 settings.message4 ='Press any key when you''re ready for the next sentence!';
+settings.retrialMessage ='Do you want to rerecord (y/n)?';
+settings.retrialMessage2 ='Ok! Press a key when you''ready to repeat the trial!';
 
 %settings.messageThankYou='Thank You!';
 settings.messageThankYou='Thank You!';
@@ -186,13 +188,14 @@ nExperiments=length(experimentNames);
 % add session column if there is none
 if ~isfield(allItems, 'session')
     [allItems.session]=deal(1);
+    columnNames= [columnNames,'session']; 
 end
 
 % add default instructions file name if there isn't one specified
 if ~isfield(allItems, 'instructions')
-    [allItems.session]=deal('instructions.txt');
+    [allItems.instructions]=deal('instructions.txt');
+    columnNames= [columnNames,'instructions']; 
 end
-
 % set up sessions
 nSessions=max([allItems.session]);
 [sessions{1:nSessions}]=deal([]);

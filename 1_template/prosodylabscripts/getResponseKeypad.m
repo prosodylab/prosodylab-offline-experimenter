@@ -31,15 +31,6 @@ while ~goodkeydown && GetSecs - start_time < time_limit
       goodkeydown = 1;
     end
 
-    if char(key)==10 % enter
-      pressedkey = 'RETURN';
-      goodkeydown = 1;
-    end
-    
-    if char(key)==8 % backspace
-      pressedkey = 'DELETE';
-      goodkeydown = 1;
-    end
   elseif ~strcmp(key,'NONE') % the ANY key option
     goodkeydown = 1;
     disp(key)
