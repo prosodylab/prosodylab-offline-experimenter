@@ -1,16 +1,14 @@
 %Purpose: Main method for experiment
 
-% item file
-% these should be a tab-separated files
-% only columns that are labeled in the header row will be
-% read into a data structure
+% item file (should be a tab-separated files, encoded in UTF-8)
+% only columns that are labeled in the header row will be read into a data structure
 
 itemFile='doff.txt';
 
-%Input and Output device
-% You can check which output devices there are
-% by using the command
-% devices = PsychPortAudio('GetDevices')
+%Input and Output device (your present choice is displayed when you run
+%script.
+% You can also check which output devices there are
+% by using the command devices = PsychPortAudio('GetDevices')
 %(unnecessary to worry about if you don't want to record sounds)
 %default outputdevice: use ''
 %(unnecessary to worry about if you don't want to play sounds)
@@ -19,7 +17,6 @@ itemFile='doff.txt';
 % settings for mac laptop: usually '0' for input, '2' for output
 settings.outputdevice=1;
 settings.inputdevice=0;
-
 
 % design: Should be specified in column 'design' in experiment spreadsheet
 % There are currently 6 options. 'Blocked' might not fully work yet:
@@ -57,7 +54,6 @@ designs={'BetweenParticipants' 'Blocked' 'Fixed'  'LatinSquare' 'Random' 'Within
 %     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
 
-
 % Settings
 
 % randomize order of experiments within a session if there are multiple
@@ -73,9 +69,6 @@ settings.path_answers='2_answers/';
 settings.path_results='2_data/';
 settings.path_soundfiles='2_data/1_soundfiles/';
 settings.path_images='2_images/';
-
-% additional column names
-settings.additionalColNames={'participant','playlist','experimentTrial','sessionTrial'};
 
 % space between lines in instruction
 settings.linespace=30;
@@ -94,7 +87,7 @@ settings.textwidth = 120;
 %settings.message ='Read silently. Press any key when you''re ready for the dialogue.';
 settings.message ='Please read the sentence silently. Click any key when you''re ready to record!';
 settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
-settings.message3 ='Press any key when you''re ready for the next sentence!';
+settings.message3 ='Press any key when you''re ready for the next trial!';
 settings.message4 ='Press any key when you''re ready for the next sentence!';
 settings.retrialMessage ='Do you want to rerecord (y/n)?';
 settings.retrialMessage2 ='Ok! Press a key when you''ready to repeat the trial!';
@@ -111,8 +104,12 @@ settings.contextx=50;
 settings.texty=600;
 settings.textx=50;
 
+% additional column names
+settings.additionalColNames={'participant','playlist','experimentTrial','sessionTrial'};
+
+
 %
-% Audio Settings
+% Other Audio Settings
 %
 
 % unify key names across operating systems
@@ -132,19 +129,15 @@ settings.acceptedkeys = {'1!','2@','3#','4$','5%','6^','7&','8*','9(','0)',...
     'RETURN','DELETE','ESCAPE','ENTER','1','2','3','4','5','6','7',...
     '8','9','0'};
 
-
 settings.sampfreq=22050;
 settings.maxsecs=300;
 settings.voicetrigger=0;
-
-
 
 commandwindow
 
 close all
 
 addpath('prosodylabscripts');
-
 
 % check device numbers for input and output are correct
 devices = PsychPortAudio('GetDevices');
@@ -175,7 +168,6 @@ while ~KbCheck(-1); end;
 if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
-
 
 
 %
@@ -246,6 +238,7 @@ end
 responsesFilename=[settings.path_results strjoin(experimentNames,'_') '_responses.txt'];
 
 if ~exist(responsesFilename,'file')
+    
     
     additionalNames=settings.additionalColNames;
     
