@@ -1,6 +1,5 @@
 %Purpose: Main method for experiment
 
-
 % item file
 % these should be a tab-separated files
 % only columns that are labeled in the header row will be
@@ -24,41 +23,42 @@ settings.inputdevice=2;
 
 % design: Should be specified in column 'design' in experiment spreadsheet
 % There are currently 6 options. 'Blocked' might not fully work yet:
-designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Between' 'Blocked'};
+designs={'BetweenParticipants' 'Blocked' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
 % decides how the trials will be ordered
 % and whether it's latin square or not
 % options:
-% 1 : Fixed (Fixed Order; No Randomization):
-%     Play all trials in the order of spreadsheet
-%     column "condition" and "item" will be ignored
-% 2 : Random (completely random):
-%     Play all trials in random order
-%     column "condition" and "item" will be ignored
-% 3 : PseudoRandom:
-%     Every condition from every item for each participant
-%     Items aren't repeated more than once (in fact, a repetition of same
-%     item can only happen once per experiment)
-%     Conditions can only be repeated once
-%     Number of items has to be divisible by number of conditions
-% 4 : LatinSquare:
-%     Only one condition from each item per subject
-%     number of items has to be divisible by number of conditions
-%     There will be as many playlists (=groups of participants)
-%     as there are conditions
-% 5 : BetweenParticipants
+%
+% BetweenParticipants
 %     Each participant see sonly one condition.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
-% 6 : Blocked:
+% Blocked:
 %     Each participant see all conditions.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions, which will reflect which condition was run
 %     in the first block
+% Fixed (Fixed Order; No Randomization):
+%     Play all trials in the order of spreadsheet
+%     column "condition" and "item" will be ignored
+% LatinSquare:
+%     Only one condition from each item per subject
+%     number of items has to be divisible by number of conditions
+%     There will be as many playlists (=groups of participants)
+%     as there are conditions
+% Random (completely random):
+%     Play all trials in random order
+%     column "condition" and "item" will be ignored
+% WithinParticipants:
+%     Every condition from every item for each participant
+%     Items aren't repeated more than once (in fact, a repetition of same
+%     item can only happen once per experiment)
+%     Conditions can only be repeated once
+%     Number of items has to be divisible by number of conditions
 
 
-% Other Settings
+% Settings
 
 % randomize order of experiments within a session if there are multiple
 % ones

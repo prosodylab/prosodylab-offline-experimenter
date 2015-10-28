@@ -58,8 +58,8 @@ c('experiment','item','condition','design')
     + Blocked: A participants sees all trials, but they are blocked by condition. Each block is presented in random order.
     + Fixed: Trials are played in the order in which they are listed in the spreadsheet.
     + LatinSquare: Each participants sees one condition from each item, and an equal number of rials from each condition across items. This is done by creating multipel playlists with choices of trials--there are as many playlists as there are conditions. Each playlist is randomized for each participant, such that a condition is not repeated more than once. Otherwise, the order is random (this is important so one can later on test whether an effect develops over time or not). 
-    + WithinParticipants: All trials a played in pseudorandom order. Randomization procedure: Same as with LatinSquare, except that each participant is played on all playlists (each is randomized), and the order of the playlists is also randomized. 
     + Random: All trials are played in completely random order.
+    + WithinParticipants: All trials a played in pseudorandom order. Randomization procedure: Same as with LatinSquare, except that each participant is played on all playlists (each is randomized), and the order of the playlists is also randomized. 
     
 * **condition** Usually, there is more than one condition. The conditions should be numbers starting with 1. Minimally, you need one condition.
 
@@ -85,11 +85,13 @@ c('experiment','item','condition','design')
 * If you have more than one question, then the second question will be determined in columns **question2** and **qType2**, and the third question in columns **question3** and **qType3**. The multiple choice options for **question2** will be **correctAnswer2**, **alt1Answer2**, **alt2Answer2**, **alt3Answer2**, and correspondinbly for the third question.
 
 
-* If you want to play a sound file, you need a column **contextFile** with the name of the soundfile (which should be a .wav file): filename.wav. You will have to save all your stimuli into a separate folder in the experiment folder. The folder should include all the stimuli you need for the experiment at the top level (i.e., they should not be in a subfolder).
+* If you want to play a sound file, you need a column **contextFile** with the name of the soundfile (which should be a .wav file): filename.wav. You will have to save all your stimuli into a separate folder in the experiment folder. The folder should include all the stimuli you need for the experiment at the top level (i.e., they should not be in a subfolder). contextfiles should be placed in a folder "2_contexts" (path name can be adjusted in variable settings.contextFile in the experiment script).
 
-* If you want to play an entire dialogue, you can add a column **answerFile**. 
+* If you want to play an entire dialogue, you can add a column **answerFile**. Answerfiles should be placed in a folder "2_answers" (path name can be adjusted in variable settings.answerFile in the experiment script).
 
 * If you want to give participants the option of repeating a trial, you need to add a column **reTrial** with 'y' or 'yes' in every cell for which a reTrial should be possible.
+
+* If you want multiple sessions (e.g., practice session, main experiment; or training and main experiment), then the spreadsheet should contain multiple experimments, and each experiment is assigned a session number (e.g., the practice session would be '1', and the main experiment would be '2'). The default session number is '1' (when there is no column **session**, then it is assumed that all experiments are in the same session). If multiple experiments are assigned to the same session they are interspersed, and effectively act as fillers to each other (trials will alternate between experiments).
 
 * The spreadsheet has to be carefully proofread.
 
