@@ -1,5 +1,8 @@
 %Purpose: Main method for experiment
 
+%
+% ----- Configuration --------------
+%
 
 % item file
 % these should be a tab-separated files
@@ -7,20 +10,6 @@
 % read into a data structure
 
 itemFile='doff.txt';
-
-%Input and Output device
-% You can check which output devices there are
-% by using the command
-% devices = PsychPortAudio('GetDevices')
-%(unnecessary to worry about if you don't want to record sounds)
-%default outputdevice: use ''
-%(unnecessary to worry about if you don't want to play sounds)
-
-% settings for macleft: both should be '5'
-% settings for mac laptop: usually '0' for input, '2' for output
-settings.outputdevice=0;
-settings.inputdevice=2;
-
 
 % design: Should be specified in column 'design' in experiment spreadsheet
 % There are currently 6 options. 'Blocked' might not fully work yet:

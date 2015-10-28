@@ -1,0 +1,100 @@
+---
+title: "prosodylab.experimenter: Setting up the Experiment"
+output: html_document
+---
+
+### The Template
+
+* The expeirment template is a folder that contains all scripts for the experiment. The reason this folder is duplicated for each experiment is to ensure that the original scripts used to run the experiment will always be kept on file (even if the official template changes). 
+
+* The folder name and  experiment-script should be relabled with the experiment name, so it's clear which experiment the template is running. 
+
+* The spreadsheet (tab-delimited text file) with the stimuli and design information should be in a folder '1_experiment'. 
+
+* The file with the instructions to the partipicant should be placed in the same folder. 
+
+* All files should be encoded in UTF-8.
+
+* Some adjustments of the experiment script are necessary for every experiment: One is that the file name of the experiment has to be changed. If any soundfiles are recorded or played to the participant the variables settings.outputdevice and settings.inputdevice needs to be set to right values. See instructions in the experimentfile.
+
+
+### The Spreadsheet
+
+* The spreadsheet provides the basic design information and the stimuli for the experiment, and other relevant information.
+
+* Column names have to be in small letters, without spaces or special symbols.
+
+* Column names should not have any spaces or special symbols: 
+    + Ok Names: conditionLabel, focus, animateNP, ...
+    + Not Ok: Condition Label, condition: Label, NP Type, ...
+    
+* You can add arbitrary columns, for example with information useful for latter plotting. But there is are certain column names that are meaningful variables for the matlab and hence can't be used for other purposes. 
+
+These are columns that are used to convey to the experimenter various crucial pieces of information about the design of the experiment:
+
+```{r, eval=FALSE}
+c('experiment','item','condition','text','context','setup','question','qType','design','session','reTrial','nChoices','contextFile','answerFile','instructions','lab','correctAnswer', 'altAnswer1', 'altAnswer2', 'altAnswer3')
+```
+
+These are columns that the experimenter uses to convey information about the experiment in the responses spreadsheet that it creates:
+
+```{r, eval=FALSE}
+c('playlist')
+```
+
+
+* Some columns are obligatory (actually, at least one more column is necessary, otherwise nothing will happen during the experiment):
+
+```{r, eval=FALSE}
+c('experiment','item','condition','design')
+```
+
+### Column Breakdown
+
+* **experiment**: the name of the experiment. Since the participant might actually see this when you start the script, it might be better to use a non-descriptive name.
+
+* **design** This determines how trials will be assigned to participants. Choices:
+    + BetweenParticipants: Each participant sees only one condition. There are as many playlists as they are conditions. The number of participants run in each playlist is balanced.
+    + Blocked: A participants sees all trials, but they are blocked by condition. Each block is presented in random order.
+    + Fixed: Trials are played in the order in which they are listed in the spreadsheet.
+    + LatinSquare: Each participants sees one condition from each item, and an equal number of rials from each condition across items. This is done by creating multipel playlists with choices of trials--there are as many playlists as there are conditions. Each playlist is randomized for each participant, such that a condition is not repeated more than once. Otherwise, the order is random (this is important so one can later on test whether an effect develops over time or not). 
+    + WithinParticipants: All trials a played in pseudorandom order. Randomization procedure: Same as with LatinSquare, except that each participant is played on all playlists (each is randomized), and the order of the playlists is also randomized. 
+    + Random: All trials are played in completely random order.
+    
+* **condition** Usually, there is more than one condition. The conditions should be numbers starting with 1. Minimally, you need one condition.
+
+* **item** Usually, there are multiple items, which vary in the choice of language materials but have the same manipulation in terms of the conditions. Each item has to have the same number of conditions. For several designs (BetweenParticipants, WithinParticipants, LatinSquare, Blocked) the number of items has to be divisible by the number of conditions (because of the way the randomization works).
+
+* **text**: If you are doing a production experiment, then column text is obligatory: This is what the participant will be recorded on.
+    + Important: If the column text consists of a number (like ”3”) or of a math formula, then it has to be enclosed in quotation marks—otherwise, no quotation marks are necessary. Quotation marks in the text will not be displayed in the experiment.
+    + Sometimes, the text column contains a symbol (like '3'), but the transcript that is saved should be different (like 'three'). This can be done by adding a column 'lab', which contains the text transcription of what the participant is recorded on. If there is no 'lab' column, the 'text' column will be saved as the transcript.
+
+* **record**: you need this column and a 'y' or 'yes' in each cell for each trial in which you want to record the participant.
+
+* You might also have a **column** context: This is a discourse context that the participant might or might not be recorded on, depending on your experiment. 
+
+* In addition to a context, you might have a **setup**, which is a little paragraph with a story that frames the upcoming dialogue (if you don’t have both setup and context, you can just use context).
+
+
+* The column **woi** (for 'word of interest') includes the exact same words as text, but the words that you will want to do measurements on are marked with "_x" w,here “x” is the label for that word. The matlab script actually does nothing with this column, but it's going to be used if you want to forced-align recordings.  The label used is  typically a number. In the end, you will compute averages over all words in your experiment marked with "1", so across items and conditions you should use the woi-annotation consistently, such that taking an average makes sense.
+  
+* You can ask up to three questions on each trial. The column **question** is what the participant is prompted with. The colum **qType** determines which type of question you are asking. It could be "yn" for yes/no- question, "jm" for a judgment or rating, and "mc"" for a multiple choice question.
+
+* If you have a multiple choice question you’ll need additional columns with the choices and also which one is the correct answer. You can add these options as columns: correctAnswer, altAnswer1, altAnswer2, altAnswer3. They will be presented in randomized order.
+
+* If you have more than one question, then the second question will be determined in columns **question2** and **qType2**, and the third question in columns **question3** and **qType3**. The multiple choice options for **question2** will be **correctAnswer2**, **alt1Answer2**, **alt2Answer2**, **alt3Answer2**, and correspondinbly for the third question.
+
+
+* If you want to play a sound file, you need a column **contextFile** with the name of the soundfile (which should be a .wav file): filename.wav. You will have to save all your stimuli into a separate folder in the experiment folder. The folder should include all the stimuli you need for the experiment at the top level (i.e., they should not be in a subfolder).
+
+* If you want to play an entire dialogue, you can add a column **answerFile**. 
+
+* If you want to give participants the option of repeating a trial, you need to add a column **reTrial** with 'y' or 'yes' in every cell for which a reTrial should be possible.
+
+* The spreadsheet has to be carefully proofread.
+
+
+### Instructions
+
+* Apart from the spreadsheet, you will need a file with instructions.  This shold be text file encoded in UTF-8. If the name of the text file is not 'instructions.txt', you'll need a column **instructions**, and every cell of the experiment needs to contain the name of the text file. 
+

@@ -2,92 +2,104 @@
 % check participant number and determine playlist
 % % chael@mcgill.ca 11/17/09
 
+function [pList, ok]=checkSetup(participant,responsesFilename,experimentNames,items)
 
-function [pList, ok]=checkSetup(participant,design,resultfile,nExperiments)
+nExperiments=length(unique(experimentNames));
+pList(1:nExperiments)=1;
 
-ok = 1;
+[allResults]=tdfimport(responsesFilename);
+[~,rows]=size(allResults);
 
-pList(nExperiments)=0;
-
-
-for j=1:nExperiments
+if rows ~= 0
     
-nPart=[];    
-    
-[results]=tdfimport(resultfile{j});
-
-[~, nTrials]=size(results);
-
-if nTrials~=0
-    
-    ok2=~(any(ismember([results(:).participant],participant)));
-    
-    if ~ok2
-        disp(sprintf('%s\n',['There is already a participant with that number in experiment ' results(1).experiment '!']));
-        ok=0;
+    ok=~(any(ismember([allResults(:).participant],participant)));
+    if ~ok
+        disp(sprintf(['There is already a participant with that number!']));
     else
-        
-        if (design(1)==3 || design(1)==4)
+        if rows > 1
             
-            nLists = max([results(:).condition]);
-            nPart(nLists)=0;
-            
-            [values count]=howmany([results(:).playlist]);
-            [numPlists,~]=size(values);
-            
-            if numPlists>nLists
-                disp(sprintf('\n%s\n','Problem with PlayList Column in Responses File!'));
-                pList(j)=1;
-            else
-                assignments=[[results(:).playlist];[results(:).participant]];
-                for i=1:numPlists
-                    numPart=assignments(1,:)==values(i);
-                    [~,partsize]=size(unique(assignments(2,numPart)));
-                    nPart(i)=partsize;
-                end
+            for j=1:nExperiments
                 
-                if  numPlists<nLists
-                    pList(j)=numPlists+1;
-                else
-                    [~, index]=min(nPart);
-                    pList(j)=values(index);
+                nPart=[];
+                
+                results=allResults(strcmp({allResults.experiment},experimentNames(j)));
+                
+                [~, nTrials]=size(results);
+                
+                if nTrials~=0
+                    
+                    % plists are kept track of for designs 3-6
+                    
+                    design=items{j}(1).design;
+                    
+                    nCond = max([items{j}.condition]);
+                    nItem = max([items{j}.item]);
+                    
+                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')
+                        maxTrial=nItem;
+                    else
+                        maxTrial=nCond*nItem;
+                    end
+                    
+                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'PseudoRandom')||strcmp(design,'Blocked')
+                        plistsToBeRun = 1:nCond;
+                    else
+                        plistsToBeRun = 1;
+                    end
+                    
+                    allTrials=[results(:).experimentTrial];
+                    completeRuns=allTrials==maxTrial;
+                    nParticipants=sum(completeRuns);
+                    
+                    listsSofar=[results(completeRuns).playlist];
+                    plistsAlreadyRun=unique(listsSofar);
+                    assignments = histc(listsSofar,plistsToBeRun);
+                    maxList=max(plistsAlreadyRun);
+                    
+                    
+                    
+                    if maxList>nCond
+                        error('\n%s\n','Problem with PlayList Column in Responses File--a playlist out of range is recorded in responses file!');
+                    elseif sum(completeRuns)~=0
+                        [~, minPlist]=min(assignments);
+                        pList(j)=minPlist;
+                    else
+                        pList(j)=1;
+                    end
+                    
+                    disp(sprintf('\n%s',['Experiment: ' results(1).experiment ]));
+                    
+                    disp(sprintf('\n%s',['Number of Conditions/Playlists in experiment: ' num2str(nCond)]));
+                    
+                    disp(sprintf('\n%s',['Names of Participants that have completed the experiment: ' num2str(nParticipants)]));
+                    
+                    disp(sprintf('\n%s',['Names of Playlists that have been played: ' num2str(plistsAlreadyRun)]));
+                    
+                    disp(sprintf('%s',['Number of Participants that completed each list: ' num2str(assignments)]));
+                    
+                    disp(sprintf('%s',['This adds up to:  ' num2str(sum(assignments)) '  and should be equal to # participants. ']));
+                    
+                    disp(sprintf('\n%s\n',['Assigned Playlist: ' num2str(pList(j)) '   (should be the one with least participants)']));
+                    
+                    
+                    while KbCheck(-1); end;
+                    disp('ok (# of particpants per playlist should be balanced)?');
+                    while ~KbCheck(-1); end;
+                    
+                    [~, ~, keyCode]=KbCheck(-1);
+                    
+                    if strcmp('n',KbName(keyCode))
+                        plistchoice=input('Please enter the desired playlist number: ', 's');
+                        pList(j)=str2num(plistchoice);
+                    end
+                    
+                    
                 end
             end
-            
-            disp(sprintf('\n%s',['Experiment: ' results(1).experiment ]));
-            
-            disp(sprintf('\n%s',['Names of Playlists that have been played: ' num2str(values')]));
-            
-            disp(sprintf('%s',['Participants per for each list so far    : ' num2str(nPart)]));
-            
-            disp(sprintf('\n%s\n',['Assigned Playlist : ' num2str(pList(j))]));
-            
-            
-            while KbCheck(-1); end;
-            disp('ok?');
-            while ~KbCheck(-1); end;
-            
-            [~, ~, keyCode]=KbCheck(-1);
-            
-            if strcmp('n',KbName(keyCode))
-                plistchoice=input('Please enter the desired playlist number: ', 's');
-                pList(j)=str2num(plistchoice);
-            end   
-        else
-            [~, nParticipants]=size([unique([results(:).participant])]);
-            disp(sprintf('\n%s',['Experiment: ' results(1).experiment ]));
-            disp(sprintf('\n%s',['Number of Participants: ' num2str(nParticipants) ]));
-            pList(j)=1;
-            
-            while KbCheck(-1); end;
-            disp('ok?');
-            while ~KbCheck(-1); end;
-            
-            [~, ~, keyCode]=KbCheck(-1);
         end
+        
     end
 else
-    pList(j)=1;
-end
+    ok=1;
 end
 end
