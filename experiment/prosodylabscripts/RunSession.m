@@ -1,6 +1,5 @@
 function []=RunSession(sessionNumber,session, playList,nTrials,pList,participant,responsesFilename,settings,ws)
 
-
 %
 % Run an Experimental Session
 %
@@ -92,7 +91,6 @@ while max(maxTrials-counter)~=0
             end
             
             
-            
             if isfield(playList{exper}(k),'labtext')
                 labtext=playList{exper}(k).labtext;
             else
@@ -106,13 +104,34 @@ while max(maxTrials-counter)~=0
             end
             
             
-            %---Display Text
+            %---Display Text and Image (if there is one)
             
             tic;
             
             while true
                 
                 while KbCheck([-1]); end;
+                
+                % display image if there is an image column
+                if isfield(playList{i}(k),'image')
+                    if playList{i}(k).picture~=''
+                        imdata=imread([ path_images  playList{i}(k).picture]);
+                        
+                        %[x,y]=size(imdata);
+                        
+                        % make texture image out of image matrix 'imdata'
+                        %tex=Screen('MakeTexture', ws.ptr, imdata);
+                        
+                        % Draw texture image to backbuffer. It will be automatically
+                        % centered in the middle of the display if you don't specify a
+                        % different destination (see Psychtoolbox Screen command):
+                        
+                        Screen(ws.ptr,'PutImage',imdata) ;
+                        
+                        % Show stimulus on screen at next possible display refresh cycle,
+                        % and record stimulus onset time in 'startrt':
+                    end
+                end
                 
                 DrawFormattedText(ws.ptr, double(settings.message),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
                 DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
@@ -128,69 +147,76 @@ while max(maxTrials-counter)~=0
                     playSound(contextFile, settings);
                 end
                 
+                record='n';
+                
                 if isfield(playList{exper}(k),'record')
-                    if playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
+                    if  playList{exper}(k).record=='Y'|playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
+                        record='y';
+                    end
+                end
+                
+                if record=='y'
+                    
+                    display=1; % If text should vanish during recording, set to 0;
+                    
+                    % show text and context if 'display' is set to true
+                    
+                    if ~isempty(ws)
                         
-                        display=1; % If text should vanish during recording, set to 0;
-                        
-                        % show text and context if 'display' is set to true
-                        
-                        if ~isempty(ws)
+                        if display
+                            DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
                             
-                            if display
-                                DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
-                                DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
-                                DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
-                                
-                                Screen('Flip',ws.ptr);
-                            else
-                                Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
-                                Screen('Flip',ws.ptr);
-                            end
+                            Screen('Flip',ws.ptr);
+                        else
+                            Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
+                            Screen('Flip',ws.ptr);
                         end
-                        
-                        % records files --> we don't want to record we want to play
-                        % files
-                        
-                        [recordedaudio]=RecordSound(settings, ws);
-                        
-                        %Construct wave file name
-                        wavfilename=[playList{exper}(k).experiment '_'...
-                            num2str(playList{exper}(k).participant) '_' ...
-                            num2str(playList{exper}(k).item) '_' ...
-                            num2str(playList{exper}(k).condition) '.wav'];
-                        
-                        playList{exper}(k).recordedFile=wavfilename;
-                        
-                        wavfilename=[settings.path_soundfiles wavfilename];
-                        
-                        wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
-                        
-                        %Save .lab file
-                        
-                        %Construct .lab file name
-                        labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
-                            '_' num2str(playList{exper}(k).participant)...
-                            '_' num2str(playList{exper}(k).item)...
-                            '_' num2str(playList{exper}(k).condition) '.lab'];
-                        
-                        fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
-                        fprintf(fid,'%s\n',labtext);  %print item text to file
-                        fclose(fid);  %close file
-                        
-                    end
-                else
-                    if  ~isempty(answerFile)
-                        WaitSecs(0.5);
-                        playSound(answerFile, settings);
                     end
                     
-                    if ~isempty(answerFile2)
-                        WaitSecs(0.5);
-                        playSound(answerFile2, settings);
-                    end
+                    % records files --> we don't want to record we want to play
+                    % files
+                    
+                    [recordedaudio]=RecordSound(settings, ws);
+                    
+                    %Construct wave file name
+                    wavfilename=[playList{exper}(k).experiment '_'...
+                        num2str(playList{exper}(k).participant) '_' ...
+                        num2str(playList{exper}(k).item) '_' ...
+                        num2str(playList{exper}(k).condition) '.wav'];
+                    
+                    playList{exper}(k).recordedFile=wavfilename;
+                    
+                    wavfilename=[settings.path_soundfiles wavfilename];
+                    
+                    wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
+                    
+                    %Save .lab file
+                    
+                    %Construct .lab file name
+                    labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                        '_' num2str(playList{exper}(k).participant)...
+                        '_' num2str(playList{exper}(k).item)...
+                        '_' num2str(playList{exper}(k).condition) '.lab'];
+                    
+                    fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
+                    fprintf(fid,'%s\n',labtext);  %print item text to file
+                    fclose(fid);  %close file
                     
                     
+                end
+                
+                % play anwer files if there are any
+                
+                if  ~isempty(answerFile)
+                    WaitSecs(0.5);
+                    playSound(answerFile, settings);
+                end
+                
+                if ~isempty(answerFile2)
+                    WaitSecs(0.5);
+                    playSound(answerFile2, settings);
                 end
                 
                 

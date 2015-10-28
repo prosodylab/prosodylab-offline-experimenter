@@ -124,7 +124,7 @@ elseif (strcmp(qType,'jm'))
     quAsk=quText;
     DrawFormattedText(ws.ptr,double(quAsk), 'center','center', 0);
     Screen('Flip',ws.ptr);
-    [pressed_key, resp_time] = getResponseKeypad(accepted_keys,inf);
+    [pressed_key, resp_time] = getResponseKeypad(settings.acceptedkeys,inf);
     FlushEvents('keyDown');
     pressed_key=str2num(pressed_key);
     
@@ -159,7 +159,7 @@ elseif (strcmp(qType,'mc'))||(strcmp(qType,'mcF'))
     DrawFormattedText(ws.ptr,mc_options, 'center','center', 0);
     Screen('Flip',ws.ptr);
     %Retrieve user's selection
-    [pressed_key, resp_time]= getResponseKeypad(accepted_keys,inf);
+    [pressed_key, resp_time]= getResponseKeypad(settings.acceptedkeys,inf);
     pressed_key=str2num(pressed_key);
     if isempty(pressed_key)
         pressed_key=0;
@@ -197,7 +197,7 @@ elseif (strcmp(qType,'brack'))
     DrawFormattedText(ws.ptr,mc_options, 'center','center', 0);
     Screen('Flip',ws.ptr);
     %Retrieve user's selection
-    [pressed_key resp_time]= getResponseKeypad(accepted_keys,inf);
+    [pressed_key resp_time]= getResponseKeypad(settings.acceptedkeys,inf);
     pressed_key=str2num(pressed_key);
     
     display(pressed_key);

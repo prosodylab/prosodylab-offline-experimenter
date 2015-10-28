@@ -1,60 +1,60 @@
 %Purpose: Main method for experiment
 
-close all
-clear all
-
-clc
-
-addpath('prosodylabscripts');
-
-%
-% ----- Configuration --------------
-%
-
-% item file
-% these should be a tab-separated files
-% only columns that are labeled in the header row will be
-% read into a data structure
+% item file (should be a tab-separated files, encoded in UTF-8)
+% only columns that are labeled in the header row will be read into a data structure
 
 itemFile='doff.txt';
 
+%Input and Output device (your present choice is displayed when you run
+%script.
+% You can also check which output devices there are
+% by using the command devices = PsychPortAudio('GetDevices')
+%(unnecessary to worry about if you don't want to record sounds)
+%default outputdevice: use ''
+%(unnecessary to worry about if you don't want to play sounds)
+
+% settings for macleft: both should be '5'
+% settings for mac laptop: usually '0' for input, '2' for output
+settings.outputdevice=1;
+settings.inputdevice=0;
+
 % design: Should be specified in column 'design' in experiment spreadsheet
 % There are currently 6 options. 'Blocked' might not fully work yet:
-designs={'Fixed' 'Random' 'PseudoRandom' 'LatinSquare' 'Between' 'Blocked'};
+designs={'BetweenParticipants' 'Blocked' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
 % decides how the trials will be ordered
 % and whether it's latin square or not
 % options:
-% 1 : Fixed (Fixed Order; No Randomization):
-%     Play all trials in the order of spreadsheet
-%     column "condition" and "item" will be ignored
-% 2 : Random (completely random):
-%     Play all trials in random order
-%     column "condition" and "item" will be ignored
-% 3 : PseudoRandom:
-%     Every condition from every item for each participant
-%     Items aren't repeated more than once (in fact, a repetition of same
-%     item can only happen once per experiment)
-%     Conditions can only be repeated once
-%     Number of items has to be divisible by number of conditions
-% 4 : LatinSquare:
-%     Only one condition from each item per subject
-%     number of items has to be divisible by number of conditions
-%     There will be as many playlists (=groups of participants)
-%     as there are conditions
-% 5 : BetweenParticipants
+%
+% BetweenParticipants
 %     Each participant see sonly one condition.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
-% 6 : Blocked:
+% Blocked:
 %     Each participant see all conditions.
 %     number of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions, which will reflect which condition was run
 %     in the first block
+% Fixed (Fixed Order; No Randomization):
+%     Play all trials in the order of spreadsheet
+%     column "condition" and "item" will be ignored
+% LatinSquare:
+%     Only one condition from each item per subject
+%     number of items has to be divisible by number of conditions
+%     There will be as many playlists (=groups of participants)
+%     as there are conditions
+% Random (completely random):
+%     Play all trials in random order
+%     column "condition" and "item" will be ignored
+% WithinParticipants:
+%     Every condition from every item for each participant
+%     Items aren't repeated more than once (in fact, a repetition of same
+%     item can only happen once per experiment)
+%     Conditions can only be repeated once
+%     Number of items has to be divisible by number of conditions
 
-
-% Other Settings
+% Settings
 
 % randomize order of experiments within a session if there are multiple
 % ones
@@ -68,10 +68,7 @@ settings.path_contexts='2_contexts/';
 settings.path_answers='2_answers/';
 settings.path_results='2_data/';
 settings.path_soundfiles='2_data/1_soundfiles/';
-
-
-% additional column names
-settings.additionalColNames={'participant','playlist','experimentTrial','sessionTrial'};
+settings.path_images='2_images/';
 
 % space between lines in instruction
 settings.linespace=30;
@@ -90,7 +87,7 @@ settings.textwidth = 120;
 %settings.message ='Read silently. Press any key when you''re ready for the dialogue.';
 settings.message ='Please read the sentence silently. Click any key when you''re ready to record!';
 settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
-settings.message3 ='Press any key when you''re ready for the next sentence!';
+settings.message3 ='Press any key when you''re ready for the next trial!';
 settings.message4 ='Press any key when you''re ready for the next sentence!';
 settings.retrialMessage ='Do you want to rerecord (y/n)?';
 settings.retrialMessage2 ='Ok! Press a key when you''ready to repeat the trial!';
@@ -107,8 +104,12 @@ settings.contextx=50;
 settings.texty=600;
 settings.textx=50;
 
+% additional column names
+settings.additionalColNames={'participant','playlist','experimentTrial','sessionTrial'};
+
+
 %
-% Audio Settings
+% Other Audio Settings
 %
 
 % unify key names across operating systems
@@ -128,20 +129,15 @@ settings.acceptedkeys = {'1!','2@','3#','4$','5%','6^','7&','8*','9(','0)',...
     'RETURN','DELETE','ESCAPE','ENTER','1','2','3','4','5','6','7',...
     '8','9','0'};
 
-%Input device
-% You can check which output devices there are
-% by using the command
-% devices = PsychPortAudio('GetDevices')
-%(unnecessary to worry about if you don't want to record sounds)
-%default outputdevice: use ''
-%(unnecessary to worry about if you don't want to play sounds)
-settings.outputdevice=5;
-settings.inputdevice=5;
-
 settings.sampfreq=22050;
 settings.maxsecs=300;
 settings.voicetrigger=0;
 
+commandwindow
+
+close all
+
+addpath('prosodylabscripts');
 
 % check device numbers for input and output are correct
 devices = PsychPortAudio('GetDevices');
@@ -173,6 +169,7 @@ if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
 
+
 %
 %  -------------------------
 %
@@ -184,6 +181,7 @@ end
 experimentNames=unique({ allItems.experiment });
 nExperiments=length(experimentNames);
 [items{1:nExperiments}]=deal([]);
+
 
 % add session column if there is none
 if ~isfield(allItems, 'session')
@@ -234,11 +232,13 @@ for i=1:nSessions
     instructions(i)=unique({allSession.instructions});
 end
 
+
 % Set up responses File and Generate Playlists
 
 responsesFilename=[settings.path_results strjoin(experimentNames,'_') '_responses.txt'];
 
 if ~exist(responsesFilename,'file')
+    
     
     additionalNames=settings.additionalColNames;
     
@@ -312,6 +312,32 @@ for i=1:nSessions
         disp(['item order: ' num2str([playList{exper}(:).item ]) ]);
         disp(['condition order: ' num2str([ playList{exper}(:).condition ]) ]);
         disp('');
+        
+        
+        % check whether all contextFiles and answerFiles exist
+        
+          if isfield(playList{exper}(1),'contextFile')
+             existingContextFiles=extractfield(dir([settings.path_contexts]),'name');
+             contextFiles=extractfield(playList{exper}(:),'contextFile');
+             missingFiles=playList{exper}(~ismember(contextFiles,existingContextFiles));
+             if size(missingFiles,2)==0
+                % nice!
+             else
+                 % problem!
+             end
+         end
+         
+         if isfield(playList{exper}(1),'answerFile')
+             existingAnswerFiles=extractfield(dir([settings.path_answers]),'name');
+             answerFiles=extractfield(playList{exper}(:),'answerFile');
+             if min(ismember(answerFiles,existingAnswerFiles))==1
+                % nice!
+             else
+                 % problem!
+             end
+         end
+        
+        %
         
     end
     
