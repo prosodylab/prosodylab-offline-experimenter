@@ -1,5 +1,4 @@
 %Purpose: Create playlist of sentences
-% chael@mcgill.ca 02/09;02/12;07/14
 
 function [playList,nTrials]=generatePlaylist(items,pList,experimentNames)
 

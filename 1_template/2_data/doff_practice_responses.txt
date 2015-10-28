@@ -1,1 +1,0 @@
-experiment	item	condition	conditionlabel	focus	phrasing	intonation	context	text	lab	woi	design	record	session	instructions	retrial	participant	playlist	experimentTrial	sessionTrial	recordedFile	trialDuration	date	trialStart	trialEnd	

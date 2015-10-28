@@ -17,8 +17,8 @@ itemFile='doff.txt';
 
 % settings for macleft: both should be '5'
 % settings for mac laptop: usually '0' for input, '2' for output
-settings.outputdevice=0;
-settings.inputdevice=2;
+settings.outputdevice=1;
+settings.inputdevice=0;
 
 
 % design: Should be specified in column 'design' in experiment spreadsheet
@@ -142,9 +142,6 @@ settings.voicetrigger=0;
 commandwindow
 
 close all
-clear all
-
-clc
 
 addpath('prosodylabscripts');
 
@@ -178,7 +175,6 @@ while ~KbCheck(-1); end;
 if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
-
 
 
 
