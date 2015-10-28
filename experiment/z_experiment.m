@@ -316,14 +316,13 @@ for i=1:nSessions
         
         % check whether all contextFiles and answerFiles exist
         
+        % check whether all contextFiles and answerFiles exist
+        
           if isfield(playList{exper}(1),'contextFile')
              existingContextFiles=extractfield(dir([settings.path_contexts]),'name');
              contextFiles=extractfield(playList{exper}(:),'contextFile');
-             missingFiles=playList{exper}(~ismember(contextFiles,existingContextFiles));
-             if size(missingFiles,2)==0
-                % nice!
-             else
-                 % problem!
+             if min(ismember(contextFiles,existingContextFiles))==0
+                 error(['Not all context files found in folder ' settings.path_contexts]);
              end
          end
          
@@ -331,9 +330,7 @@ for i=1:nSessions
              existingAnswerFiles=extractfield(dir([settings.path_answers]),'name');
              answerFiles=extractfield(playList{exper}(:),'answerFile');
              if min(ismember(answerFiles,existingAnswerFiles))==1
-                % nice!
-             else
-                 % problem!
+                error(['Not all answer files found in folder ' settings.path_answers]);
              end
          end
         
