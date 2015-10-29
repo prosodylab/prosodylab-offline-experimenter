@@ -1,6 +1,5 @@
 % checkSetup
 % check participant number and determine playlist
-% % chael@mcgill.ca 11/17/09
 
 function [pList, ok]=checkSetup(participant,responsesFilename,experimentNames,items)
 
@@ -41,7 +40,7 @@ if rows ~= 0
                         maxTrial=nCond*nItem;
                     end
                     
-                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'PseudoRandom')||strcmp(design,'Blocked')
+                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'Within')||strcmp(design,'Blocked')
                         plistsToBeRun = 1:nCond;
                     else
                         plistsToBeRun = 1;
