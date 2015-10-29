@@ -19,44 +19,58 @@ settings.outputdevice=1;
 settings.inputdevice=0;
 
 % design: Should be specified in column 'design' in experiment spreadsheet
-% There are currently 6 options. 'Blocked' might not fully work yet:
-designs={'BetweenParticipants' 'Blocked' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
-% decides how the trials will be ordered
-% and whether it's latin square or not
-% options:
+% Options:
+%
+designs={'BetweenParticipants' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
+%
 %
 % BetweenParticipants
-%     Each participant see sonly one condition.
-%     number of items has to be divisible by number of conditions
+%     Each participant sees only one condition.
+%     Mumber of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
 % Blocked:
 %     Each participant see all conditions.
-%     number of items has to be divisible by number of conditions
+%     There will be a separate block for every condition.
+%     Blocks are in random order.
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions, which will reflect which condition was run
 %     in the first block
+% BlockedFixed:
+%     Each participant see all conditions.
+%     There will be a separate block for every condition.
+%     Blocks are in fixed order (condition 1 first), order within is random.
+%     Number of items has to be divisible by number of conditions
 % Fixed (Fixed Order; No Randomization):
 %     Play all trials in the order of spreadsheet
 %     column "condition" and "item" will be ignored
 % LatinSquare:
 %     Only one condition from each item per subject
-%     number of items has to be divisible by number of conditions
+%     Equal number of trials from each condition.
+%     Number of items has to be divisible by number of conditions.
+%     Order is pseudo-random, conditions can only be repeated once.
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
 % Random (completely random):
-%     Play all trials in random order
+%     Play all trials in completely random order
 %     column "condition" and "item" will be ignored
 % WithinParticipants:
-%     Every condition from every item for each participant
-%     Items aren't repeated more than once (in fact, a repetition of same
-%     item can only happen once per experiment)
+%     Everyone see all conditison from all items.
+%     Trials are randomized in blocks, such that each block corresponds
+%     to a latin square set up (one condition from each item, equal number
+%     from each condition). 
+%     Order within block is pseudo-random, conditions can only be repeated once.
+%     order of blocks are randomized. 
+%     Number of items has to be divisible by number of conditions
+%     First item=n/nCondition trials can be analyzed as latin square design
+%     experiment.
+%     Items aren't repeated more than once at transitions between blocks.
 %     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
 
 % Settings
 
-% randomize order of experiments within a session if there are multiple
+% randomize order of experiments within a session, if there are multiple
 % ones
 randomizeOrderExperiments=true;
 

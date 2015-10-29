@@ -41,7 +41,7 @@ if rows ~= 0
                         maxTrial=nCond*nItem;
                     end
                     
-                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'PseudoRandom')||strcmp(design,'Blocked')
+                    if strcmp(design,'LatinSquare')||strcmp(design,'Between')||strcmp(design,'Within')||strcmp(design,'Blocked')
                         plistsToBeRun = 1:nCond;
                     else
                         plistsToBeRun = 1;

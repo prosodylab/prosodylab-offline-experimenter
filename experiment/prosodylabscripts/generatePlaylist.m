@@ -1,79 +1,57 @@
 %Purpose: Create playlist of sentences
-<<<<<<< HEAD:experiment/prosodylabscripts/generatePlaylist.m
 
 function [playList,nTrials]=generatePlaylist(items,pList,experimentNames)
 
-% design: Should be specified in column 'design' in experiment spreadsheet
-% There are currently 6 options. 'Blocked' might not fully work yet:
-designs={'BetweenParticipants' 'Blocked' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
-% decides how the trials will be ordered
-% and whether it's latin square or not
-% options:
+% % design: Should be specified in column 'design' in experiment spreadsheet
+% Options:
 %
-% BetweenParticipants
-%     Each participant see sonly one condition.
-%     number of items has to be divisible by number of conditions
+designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Within'};
+%
+%
+% Between
+%     Each participant sees only one condition.
+%     Mumber of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
 % Blocked:
 %     Each participant see all conditions.
-%     number of items has to be divisible by number of conditions
+%     There will be a separate block for every condition.
+%     Blocks are in random order.
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions, which will reflect which condition was run
 %     in the first block
+% BlockedFixed:
+%     Each participant see all conditions.
+%     There will be a separate block for every condition.
+%     Blocks are in fixed order (condition 1 first), order within is random.
+%     Number of items has to be divisible by number of conditions
 % Fixed (Fixed Order; No Randomization):
 %     Play all trials in the order of spreadsheet
 %     column "condition" and "item" will be ignored
 % LatinSquare:
 %     Only one condition from each item per subject
-%     number of items has to be divisible by number of conditions
+%     Equal number of trials from each condition.
+%     Number of items has to be divisible by number of conditions.
+%     Order is pseudo-random, conditions can only be repeated once.
 %     There will be as many playlists (=groups of participants)
 %     as there are conditions
 % Random (completely random):
-%     Play all trials in random order
+%     Play all trials in completely random order
 %     column "condition" and "item" will be ignored
-% WithinParticipants:
-=======
-% chael@mcgill.ca 02/09;02/12;07/14
-
-function [playList,nTrials]=generatePlaylist(items,pList,experimentNames)
-
-% Designs:
-% decides how the trials will be ordered
-% and whether it's latin square or not
-% Options:
-% 1 : Fixed (Fixed Order; No Randomization):
-%     Play all trials in the order of spreadsheet
-%     column "condition" and "item" will be ignored
-% 2 : Random (completely random):
-%     Play all trials in random order
-%     column "condition" and "item" will be ignored
-% 3 : PseudoRandom:
->>>>>>> prosodylab/master:1_template/prosodylabscripts/generatePlaylist.m
-%     Every condition from every item for each participant
-%     Items aren't repeated more than once (in fact, a repetition of same
-%     item can only happen once per experiment)
+% Within:
+%     Everyone see all conditison from all items.
+%     Trials are randomized in blocks, such that each block corresponds
+%     to a latin square set up (one condition from each item, equal number
+%     from each condition). 
+%     Order within block is pseudo-random, conditions can only be repeated once.
+%     order of blocks are randomized. 
+%     Number of items has to be divisible by number of conditions
+%     First item=n/nCondition trials can be analyzed as latin square design
+%     experiment.
+%     Items aren't repeated more than once at transitions between blocks.
 %     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
-<<<<<<< HEAD:experiment/prosodylabscripts/generatePlaylist.m
-=======
-% 4 : LatinSquare:
-%     Only one condition from each item per subject
-%     number of items has to be divisible by number of conditions
-%     There will be as many playlists (=groups of participants)
-%     as there are conditions
-% 5 : BetweenParticipants
-%     Each participant see sonly one condition.
-%     number of items has to be divisible by number of conditions
-%     There will be as many playlists (=groups of participants)
-%     as there are conditions
-% 6 : Blocked:
-%     Each participant see all conditions.
-%     number of items has to be divisible by number of conditions
-%     There will be as many playlists (=groups of participants)
-%     as there are conditions, which will reflect which condition was run
-%     in the first block
->>>>>>> prosodylab/master:1_template/prosodylabscripts/generatePlaylist.m
+
 
 nExperiments=length(unique(experimentNames));
 
@@ -97,39 +75,19 @@ for k=1:nExperiments
         rTrial=randperm(elength);
         for i=1:elength
             newList(i)=playList{exper}(rTrial(i));
-<<<<<<< HEAD:experiment/prosodylabscripts/generatePlaylist.m
         end
         playList{exper}=newlist;
         
-    elseif strcmp(design,'WithinParticipants')
-        % WithingParticipants: pseudo-random, Each Condition from Each Item for Each Participant
-        % each block like latin square design with one condition from each
-        % item; blocks are ordered according to pList (should be balanced
-        % across participants).
+    elseif strcmp(design,'Within')
+        %
         nItems=max([items{exper}(:).item]);
         nConditions=max([items{exper}(:).condition]);
         
         if round(nItems/nConditions)~=nItems/nConditions
             error(['For design ' design ', number of items (' num2str(nItems) ') has to be divisible by number of conditions(' num2str(nConditions) ')!']);
         end
-=======
-        end
-        playList{exper}=newlist;
         
-    elseif strcmp(design,'PseudoRandom')
-        % Pseudo-Random, Each Condition from Each Item for Each Participant
-        % each block like latin square design with one condition from each
-        % item; blocks are ordered according to pList (should be balanced
-        % across participants).
-        nItems=max([items{exper}(:).item]);
-        nConditions=max([items{exper}(:).condition]);
-        
-        if round(nItems/nConditions)~=nItems/nConditions
-            error(['For design ' design ', number of items (' num2str(nItems) ') has to be divisible by number of conditions(' num2str(nConditions) ')!']);
-        end
->>>>>>> prosodylab/master:1_template/prosodylabscripts/generatePlaylist.m
-        
-        % Create Latin-Square-Style Playlists with randomized item selection
+        % Create several Latin-Square-Style Playlists with randomized item selection
         % and order Playlists in Random Order
         nBlocks=nItems/nConditions;
         rCondition=randperm(nConditions);
@@ -196,9 +154,13 @@ for k=1:nExperiments
         
     elseif strcmp(design,'LatinSquare')
         % Latin Square: One condition from each item for each participant
-            
+        
         nItems=max([items{exper}(:).item]);
         nConditions=max([items{exper}(:).condition]);
+        
+        if round(nItems/nConditions)~=nItems/nConditions
+            error(['For design ' design ', number of items (' num2str(nItems) ') has to be divisible by number of conditions(' num2str(nConditions) ')!']);
+        end
         
         %
         nBlocks=nItems/nConditions;
@@ -250,8 +212,7 @@ for k=1:nExperiments
         
         playList{exper}=newlist;
         nTrials(exper)=nItems;
-        
-        
+         
     elseif strcmp(design,'Between')
         %Between: Every subject sees only one condition
         
@@ -285,6 +246,41 @@ for k=1:nExperiments
         %Loop through items
         for j=1:nConditions
             selectCondition=mod(j+pList(exper)-1,nConditions)+1;
+            for i=1:nItems
+                selectItem=i;
+                trial=(j-1)*nItems+i;
+                index=selectItem*nConditions-selectCondition+1;
+                playList{exper}(trial)=items{exper}(index);
+            end
+        end
+        
+        rCond=0;
+        while rCond~=pList(exper)
+            rCond=randperm(nConditions);
+        end
+        
+        newlist=items{exper}(1);
+        for j=1:nConditions
+            selectCondition=rCond(j);
+            rTrial=randperm(nItems);
+            for i=1:nItems
+                newTrial=(j-1)*nItems+i;
+                trial=(selectCondition-1)*nItems+rTrial(i);
+                newList(newTrial)=playList{exper}(trial);
+            end
+        end
+        
+        playList{exper}=newList;
+        nTrials(exper)=nConditions*nItems;
+        
+    elseif strcmp(design,'BlockedFixed')
+        
+        nItems=max([items{exper}(:).item]);
+        nConditions=max([items{exper}(:).condition]);
+        
+        %Loop through items
+        for j=1:nConditions
+            selectCondition=j;
             for i=1:nItems
                 selectItem=i;
                 trial=(j-1)*nItems+i;
