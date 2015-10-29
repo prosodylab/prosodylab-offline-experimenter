@@ -1,6 +1,5 @@
 % checkSetup
 % check participant number and determine playlist
-% % chael@mcgill.ca 11/17/09
 
 function [pList, ok]=checkSetup(participant,responsesFilename,experimentNames,items)
 

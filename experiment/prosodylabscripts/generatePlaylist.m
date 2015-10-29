@@ -7,6 +7,9 @@ function [playList,nTrials]=generatePlaylist(items,pList,experimentNames)
 %
 designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Within'};
 %
+% designs requiring spreadsheet to be ordered by item and then condition:
+pickyDesigns={'LatinSquare' 'Within'};
+%
 %
 % Between
 %     Each participant sees only one condition.
@@ -60,6 +63,29 @@ for k=1:nExperiments
     exper=k;
     trial=0;
     design=items{exper}(1).design;
+    
+    % sort by item and then condition if design requires it
+    if ismember(design,pickyDesigns)
+
+        % identify item and condition columns:
+        itemFields=fieldnames(items{exper});
+        itemColumn=find(ismember(itemFields,'item'));
+        conditionColumn=find(ismember(itemFields,'condition'));
+        
+        % convert to cell and then to matrix, in order to sort:
+        itemSorted=struct2cell(items{exper});
+        sz = size(itemSorted);
+        itemSorted=reshape(itemSorted, sz(1), []);
+        itemSorted=itemSorted';
+        % sort by item and then by condition (opposite order necessary):
+        itemSorted = sortrows(itemSorted, conditionColumn);
+        itemSorted = sortrows(itemSorted, itemColumn);
+        % convert back to cell array and then structure:
+        itemSorted=reshape(itemSorted', sz);
+        itemSorted = cell2struct(itemSorted, itemFields, 1);
+        % test whether identical
+        isequal(itemSorted,items{exper})
+    end
     
     if strcmp(design,'Fixed')
         playList{exper}=items{exper};

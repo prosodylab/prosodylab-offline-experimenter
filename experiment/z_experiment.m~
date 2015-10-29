@@ -21,10 +21,10 @@ settings.inputdevice=0;
 % design: Should be specified in column 'design' in experiment spreadsheet
 % Options:
 %
-designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Within'};
+designs={'BetweenParticipants' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'WithinParticipants'};
 %
 %
-% Between
+% BetweenParticipants
 %     Each participant sees only one condition.
 %     Mumber of items has to be divisible by number of conditions
 %     There will be as many playlists (=groups of participants)
@@ -54,7 +54,7 @@ designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Wit
 % Random (completely random):
 %     Play all trials in completely random order
 %     column "condition" and "item" will be ignored
-% Within:
+% WithinParticipants:
 %     Everyone see all conditison from all items.
 %     Trials are randomized in blocks, such that each block corresponds
 %     to a latin square set up (one condition from each item, equal number
@@ -65,7 +65,7 @@ designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Wit
 %     First item=n/nCondition trials can be analyzed as latin square design
 %     experiment.
 %     Items aren't repeated more than once at transitions between blocks.
-%     Conditions can only be repeated once.
+%     Conditions can only be repeated once
 %     Number of items has to be divisible by number of conditions
 
 % Settings
@@ -370,6 +370,7 @@ ws = doScreen(settings);
 % Run Experiment
 for i=1:nSessions
     % for each session, run RunExp
+   
     
     % Making sure font settings are correct
     Screen('Preference', 'TextRenderer', 1 );
