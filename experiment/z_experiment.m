@@ -1,4 +1,11 @@
-%Purpose: Main method for experiment
+% Main experiment method
+
+commandwindow
+
+close all
+clear all
+
+clc
 
 % item file (should be a tab-separated files, encoded in UTF-8)
 % only columns that are labeled in the header row will be read into a data structure
@@ -9,16 +16,17 @@ itemFile='doff.txt';
 %script.
 % You can also check which output devices there are
 % by using the command devices = PsychPortAudio('GetDevices')
-%(unnecessary to worry about if you don't want to record sounds)
-%default outputdevice: use ''
-%(unnecessary to worry about if you don't want to play sounds)
+% (unnecessary to worry about if you don't want to record sounds)
+% default outputdevice: use ''
+% (unnecessary to worry about if you don't want to play sounds)
 
-% settings for macleft: both should be '5'
-% settings for mac laptop: usually '0' for input, '2' for output
+% settings for mac mini with USB: both should be '1'
+% settings for mac laptop: usually '0' for input, '1' for default output
+
 settings.outputdevice=1;
 settings.inputdevice=0;
 
-% design: Should be specified in column 'design' in experiment spreadsheet
+% Design: Needs to be specified in column 'design' in experiment spreadsheet
 % Options:
 %
 designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Within'};
@@ -147,9 +155,6 @@ settings.sampfreq=22050;
 settings.maxsecs=300;
 settings.voicetrigger=0;
 
-commandwindow
-
-close all
 
 addpath('prosodylabscripts');
 

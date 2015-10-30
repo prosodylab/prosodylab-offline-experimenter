@@ -83,8 +83,7 @@ for k=1:nExperiments
         % convert back to cell array and then structure:
         itemSorted=reshape(itemSorted', sz);
         itemSorted = cell2struct(itemSorted, itemFields, 1);
-        % test whether identical
-        isequal(itemSorted,items{exper})
+
     end
     
     if strcmp(design,'Fixed')
