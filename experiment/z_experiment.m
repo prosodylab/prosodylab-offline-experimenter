@@ -346,7 +346,7 @@ for i=1:nSessions
          if isfield(playList{exper}(1),'answerFile')
              existingAnswerFiles=extractfield(dir([settings.path_answers]),'name');
              answerFiles=extractfield(playList{exper}(:),'answerFile');
-             if min(ismember(answerFiles,existingAnswerFiles))==1
+             if min(ismember(answerFiles,existingAnswerFiles))==0
                 error(['Not all answer files found in folder ' settings.path_answers]);
              end
          end
