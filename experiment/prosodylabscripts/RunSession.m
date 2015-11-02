@@ -56,14 +56,14 @@ while max(maxTrials-counter)~=0
             
             context=[];
             
-            if isfield(playList{exper}(k),'setup')&&~(strcmp(playList{exper}(k).setup,'')
+            if isfield(playList{exper}(k),'setup')&&~(strcmp(playList{exper}(k).setup,''))
                 context=[ '[' playList{exper}(k).setup ']'];
             else
                 context=[];
             end
             
             if isfield(playList{exper}(k),'context')
-                context=[ context '\n\n' playList{exper}(k).context ];
+                context=[ playList{exper}(k).context '\n\n' context ];
             else
                 context=[];
             end
