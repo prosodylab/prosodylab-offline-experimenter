@@ -339,7 +339,7 @@ for i=1:nSessions
              if min(ismember(contextFiles,existingContextFiles))==0
                 disp('Not all context files found in folder');
                 disp('');
-                disp(['Missing files:' contextFiles(~ismember(contextFiles,existingContextFiles)) ]);
+                disp(['Missing files:' [{contextFiles{~ismember(contextFiles,existingContextFiles)}}] ]);
                  error(['Add missing context files or fix name!' settings.path_contexts]);
              end
          end
@@ -350,7 +350,7 @@ for i=1:nSessions
              if min(ismember(answerFiles,existingAnswerFiles))==0
                 disp('Not all answer files found in folder');
                 disp('');
-                disp(['Missing files:' answerFiles(~ismember(answerFiles,existingContextFiles)) ]);
+                disp(['Missing files:' ]);
                 error(['Add missing answer files or fix name!' settings.path_answers]);
              end
          end
