@@ -150,12 +150,14 @@ while max(maxTrials-counter)~=0
                 record='n';
                 
                 if isfield(playList{exper}(k),'record')
-                    if  playList{exper}(k).record=='Y'|playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
+                    if  ismember(playList{exper}(k).record,{'y','Y','YES','yes','Yes'})
                         record='y';
+                    elseif ismember(playList{exper}(k).record,{'twice','Twice'})
+                        record='twice';
                     end
                 end
                 
-                if record=='y'
+                if strcmp(record,'y')|strcmp(record,'twice')
                     
                     display=1; % If text should vanish during recording, set to 0;
                     
@@ -204,6 +206,57 @@ while max(maxTrials-counter)~=0
                     fprintf(fid,'%s\n',labtext);  %print item text to file
                     fclose(fid);  %close file
                     
+                    
+                end
+                
+                               if strcmp(record,'twice')
+                    
+                    display=1; % If text should vanish during recording, set to 0;
+                    
+                    % show text and context if 'display' is set to true
+                    
+                    if ~isempty(ws)
+                        
+                        if display
+                            DrawFormattedText(ws.ptr, double(settings.message5),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
+                            
+                            Screen('Flip',ws.ptr);
+                        else
+                            Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
+                            Screen('Flip',ws.ptr);
+                        end
+                    end
+                    
+                    % records files --> we don't want to record we want to play
+                    % files
+                    
+                    [recordedaudio]=RecordSound(settings, ws);
+                    
+                    %Construct wave file name
+                    wavfilename=[playList{exper}(k).experiment '_'...
+                        num2str(playList{exper}(k).participant) '_' ...
+                        num2str(playList{exper}(k).item) '_' ...
+                        num2str(playList{exper}(k).condition) '_second.wav'];
+                    
+                    playList{exper}(k).secondRecordFile=wavfilename;
+                    
+                    wavfilename=[settings.path_soundfiles wavfilename];
+                    
+                    wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
+                    
+                    %Save .lab file
+                    
+                    %Construct .lab file name
+                    labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                        '_' num2str(playList{exper}(k).participant)...
+                        '_' num2str(playList{exper}(k).item)...
+                        '_' num2str(playList{exper}(k).condition) '_second.lab'];
+                    
+                    fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
+                    fprintf(fid,'%s\n',labtext);  %print item text to file
+                    fclose(fid);  %close file
                     
                 end
                 

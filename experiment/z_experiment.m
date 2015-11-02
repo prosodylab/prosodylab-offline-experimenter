@@ -111,6 +111,7 @@ settings.message ='Please read the sentence silently. Click any key when you''re
 settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
 settings.message3 ='Press any key when you''re ready for the next trial!';
 settings.message4 ='Press any key when you''re ready for the next sentence!';
+settings.message5 ='Now say the same sentence, but faster!';
 settings.retrialMessage ='Do you want to rerecord (y/n)?';
 settings.retrialMessage2 ='Ok! Press a key when you''ready to repeat the trial!';
 
@@ -263,8 +264,10 @@ if ~exist(responsesFilename,'file')
     
     % add columnname for recorded file
     if isfield(items{i},'record')
-        if ismember('y',unique({items{i}(:).record}))
+        if max(ismember({'Yes','y','yes','YES'},unique({items{i}(:).record})))==1
             additionalNames=[ additionalNames,'recordedFile' ];
+        elseif max(ismember({'twice','Twice'},unique({items{i}(:).record})))==1
+            additionalNames=[ additionalNames,'recordedFile','secondRecordFile' ];
         end
     end
     
