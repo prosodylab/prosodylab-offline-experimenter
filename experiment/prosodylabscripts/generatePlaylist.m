@@ -101,7 +101,7 @@ for k=1:nExperiments
         for i=1:elength
             newList(i)=playList{exper}(rTrial(i));
         end
-        playList{exper}=newlist;
+        playList{exper}=newList;
         
     elseif strcmp(design,'Within')
         %

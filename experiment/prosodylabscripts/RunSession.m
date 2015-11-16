@@ -54,7 +54,6 @@ while max(maxTrials-counter)~=0
                 text=[];
             end
             
-            context=[];
             
             if isfield(playList{exper}(k),'setup')&&~(strcmp(playList{exper}(k).setup,''))
                 context=[ '[' playList{exper}(k).setup ']'];
@@ -91,10 +90,12 @@ while max(maxTrials-counter)~=0
             end
             
             
-            if isfield(playList{exper}(k),'labtext')
-                labtext=playList{exper}(k).labtext;
+            if isfield(playList{exper}(k),'lab')
+                labtext=playList{exper}(k).lab;
+            elseif isfield(playList{exper}(k),'text')
+                labtext=playList{exper}(k).text;
             else
-                labtext=text;
+                labtext=[];
             end
             
             if isfield(playList{exper}(k),'retrial')
@@ -150,20 +151,22 @@ while max(maxTrials-counter)~=0
                 record='n';
                 
                 if isfield(playList{exper}(k),'record')
-                    if  playList{exper}(k).record=='Y'|playList{exper}(k).record=='y'|playList{exper}(k).record=='yes'|playList{exper}(k).record=='Yes'
+                    if  ismember(playList{exper}(k).record,{'y','Y','YES','yes','Yes'})
                         record='y';
+                    elseif ismember(playList{exper}(k).record,{'twice','Twice'})
+                        record='twice';
+                    elseif ismember(playList{exper}(k).record,{'memorized','Memorized'})
+                        record='memorized';
+                    elseif ismember(playList{exper}(k).record,{'paced','Paced'})
+                        record='paced';
                     end
                 end
                 
-                if record=='y'
-                    
-                    display=1; % If text should vanish during recording, set to 0;
-                    
-                    % show text and context if 'display' is set to true
+                if strcmp(record,'y')||strcmp(record,'twice')||strcmp(record,'memorized')
                     
                     if ~isempty(ws)
-                        
-                        if display
+                         % text disappears for recording if 'memorized'
+                        if ~strcmp(record,'memorized')
                             DrawFormattedText(ws.ptr, double(settings.message2),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
                             DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
                             DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
@@ -190,7 +193,7 @@ while max(maxTrials-counter)~=0
                     
                     wavfilename=[settings.path_soundfiles wavfilename];
                     
-                    wavwrite(transpose(recordedaudio), settings.sampfreq, 16, wavfilename);
+                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
                     
                     %Save .lab file
                     
@@ -203,7 +206,92 @@ while max(maxTrials-counter)~=0
                     fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
                     fprintf(fid,'%s\n',labtext);  %print item text to file
                     fclose(fid);  %close file
+                
+                elseif strcmp(record,'paced')
                     
+                    % Parts of the upcoming  textto be read will be revealed after
+                    % initiating speaking on the prior zone of interest
+                    
+                    chunks=strsplit(playList{exper}(k).zoi,'_');
+                    
+                    [recordedaudio,trigger]=pacedRecording(chunks,settings,ws);
+                    
+                    playList{exper}(k).trigger=trigger;
+                    
+                    %Construct wav file name
+                    wavfilename=[playList{exper}(k).experiment '_'...
+                        num2str(playList{exper}(k).participant) '_' ...
+                        num2str(playList{exper}(k).item) '_' ...
+                        num2str(playList{exper}(k).condition) '.wav'];
+                    
+                    playList{exper}(k).recordedFile=wavfilename;
+                    
+                    wavfilename=[settings.path_soundfiles wavfilename];
+                    
+                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
+                    
+                    %Save .lab file
+                    
+                    %Construct .lab file name
+                    labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                        '_' num2str(playList{exper}(k).participant)...
+                        '_' num2str(playList{exper}(k).item)...
+                        '_' num2str(playList{exper}(k).condition) '.lab'];
+                    
+                    fid = fopen(labfilename,'a','l', 'UTF-8');  %open file and appending
+                    fprintf(fid,'%s\n',labtext);  %print item text to file
+                    fclose(fid);  %close file
+                    
+                end
+                
+                if strcmp(record,'twice')
+                    
+                    display=1; % If text should vanish during recording, set to 0;
+                    
+                    % show text and context if 'display' is set to true
+                    
+                    if ~isempty(ws)
+                        
+                        if display
+                            DrawFormattedText(ws.ptr, double(settings.message5),settings.messagex,settings.messagey,[255, 0, 0, 255],settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(context),settings.contextx,settings.contexty,0,settings.textwidth,[],[],1.2);
+                            DrawFormattedText(ws.ptr, double(text),settings.textx,settings.texty,0,settings.textwidth,[],[],1.2);
+                            
+                            Screen('Flip',ws.ptr);
+                        else
+                            Screen('DrawText', ws.ptr, double(settings.message2),50,[settings.messageheight]);
+                            Screen('Flip',ws.ptr);
+                        end
+                    end
+                    
+                    % records files --> we don't want to record we want to play
+                    % files
+                    
+                    [recordedaudio]=RecordSound(settings, ws);
+                    
+                    %Construct wave file name
+                    wavfilename=[playList{exper}(k).experiment '_'...
+                        num2str(playList{exper}(k).participant) '_' ...
+                        num2str(playList{exper}(k).item) '_' ...
+                        num2str(playList{exper}(k).condition) '_second.wav'];
+                    
+                    playList{exper}(k).secondRecordFile=wavfilename;
+                    
+                    wavfilename=[settings.path_soundfiles wavfilename];
+                    
+                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
+                    
+                    %Save .lab file
+                    
+                    %Construct .lab file name
+                    labfilename=[settings.path_soundfiles,playList{exper}(k).experiment...
+                        '_' num2str(playList{exper}(k).participant)...
+                        '_' num2str(playList{exper}(k).item)...
+                        '_' num2str(playList{exper}(k).condition) '_second.lab'];
+                    
+                    fid = fopen([labfilename],'a','l', 'UTF-8');  %open file and appending
+                    fprintf(fid,'%s\n',labtext);  %print item text to file
+                    fclose(fid);  %close file
                     
                 end
                 

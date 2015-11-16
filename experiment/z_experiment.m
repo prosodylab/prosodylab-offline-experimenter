@@ -10,7 +10,7 @@ clc
 % item file (should be a tab-separated files, encoded in UTF-8)
 % only columns that are labeled in the header row will be read into a data structure
 
-itemFile='doff.txt';
+itemFile='msvt.txt';
 
 %Input and Output device (your present choice is displayed when you run
 %script.
@@ -111,6 +111,7 @@ settings.message ='Please read the sentence silently. Click any key when you''re
 settings.message2 ='Please say the sentence out loud now. Press any key when you''re done recording!';
 settings.message3 ='Press any key when you''re ready for the next trial!';
 settings.message4 ='Press any key when you''re ready for the next sentence!';
+settings.message5 ='Now say the same sentence, but faster!';
 settings.retrialMessage ='Do you want to rerecord (y/n)?';
 settings.retrialMessage2 ='Ok! Press a key when you''ready to repeat the trial!';
 
@@ -134,6 +135,11 @@ settings.additionalColNames={'participant','playlist','experimentTrial','session
 % Other Audio Settings
 %
 
+settings.samplingFrequency=22050;
+settings.maxsecs=300;
+settings.voiceTrigger=0.05;
+settings.paceDelay=1; % in seconds
+
 % unify key names across operating systems
 KbName('UnifyKeyNames');
 
@@ -150,10 +156,6 @@ settings.max_addends = 8;
 settings.acceptedkeys = {'1!','2@','3#','4$','5%','6^','7&','8*','9(','0)',...
     'RETURN','DELETE','ESCAPE','ENTER','1','2','3','4','5','6','7',...
     '8','9','0'};
-
-settings.sampfreq=22050;
-settings.maxsecs=300;
-settings.voicetrigger=0;
 
 
 addpath('prosodylabscripts');
@@ -193,7 +195,7 @@ end
 %  -------------------------
 %
 
-% Read in itesm and set up experiments and sessions
+% Read in items and set up experiments and sessions
 
 [allItems,columnNames]=tdfimport([settings.path_items itemFile]);
 
@@ -258,13 +260,16 @@ responsesFilename=[settings.path_results strjoin(experimentNames,'_') '_response
 
 if ~exist(responsesFilename,'file')
     
-    
     additionalNames=settings.additionalColNames;
     
     % add columnname for recorded file
     if isfield(items{i},'record')
-        if ismember('y',unique({items{i}(:).record}))
+        if max(ismember({'Yes','y','yes','YES','memorized','Memorized'},unique({items{i}(:).record})))==1
             additionalNames=[ additionalNames,'recordedFile' ];
+        elseif max(ismember({'twice','Twice'},unique({items{i}(:).record})))==1
+            additionalNames=[ additionalNames,'recordedFile','secondRecordFile' ];
+        elseif max(ismember({'paced','Paced'},unique({items{i}(:).record})))==1
+            additionalNames=[ additionalNames,'timeToTrigger','recordedFile' ];
         end
     end
     
@@ -279,6 +284,7 @@ if ~exist(responsesFilename,'file')
         end
         
     end
+    
     
     % add columnname for end time
     additionalNames = [additionalNames, 'trialDuration','date','trialStart','trialEnd'];
@@ -340,7 +346,7 @@ for i=1:nSessions
                 disp('Not all context files found in folder');
                 disp('');
                 disp(['Missing files:' contextFiles(~ismember(contextFiles,existingContextFiles)) ]);
-                 error(['Add missing context files or fix name!' settings.path_contexts]);
+                 error(['Add missing context files or fix name! (Path: ' settings.path_contexts ')']);
              end
          end
          
@@ -351,7 +357,7 @@ for i=1:nSessions
                 disp('Not all answer files found in folder');
                 disp('');
                 disp(['Missing files:' answerFiles(~ismember(answerFiles,existingContextFiles)) ]);
-                error(['Add missing answer files or fix name!' settings.path_answers]);
+                error(['Add missing context files or fix name! (Path: ' settings.path_answers ')']);
              end
          end
         
