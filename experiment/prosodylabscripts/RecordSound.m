@@ -1,7 +1,7 @@
-function [recordedaudio]=RecordSound(settings, screen)
+function[recordedaudio]=RecordSound(settings, screen)
 
-samplingrate=settings.sampfreq;
-voicetrigger=settings.voicetrigger;
+samplingrate=settings.samplingFrequency;
+voicetrigger=settings.voiceTrigger;
 maxsecs=settings.maxsecs;
 
 AssertOpenGL;
@@ -43,7 +43,7 @@ if voicetrigger > 0
         
         % Below trigger-threshold?
         if level < voicetrigger
-            % Wait for a millisecond before next scan:
+            % Wait before next scan:
             WaitSecs(0.0001);
         end
     end

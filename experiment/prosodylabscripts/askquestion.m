@@ -156,7 +156,7 @@ elseif (strcmp(qType,'mc'))||(strcmp(qType,'mcF'))
         
     end
     
-    DrawFormattedText(ws.ptr,mc_options, 'center','center', 0);
+    DrawFormattedText(ws.ptr, double(mc_options),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
     Screen('Flip',ws.ptr);
     %Retrieve user's selection
     [pressed_key, resp_time]= getResponseKeypad(settings.acceptedkeys,inf);
