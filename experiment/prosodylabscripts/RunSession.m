@@ -1,28 +1,28 @@
-function []=RunSession(sessionNumber,session, playList,nTrials,pList,participant,responsesFilename,settings,ws)
+function []=RunSession(sessionNumber,experiments, playList,nTrials,pList,participant,responsesFilename,settings,ws)
 
 %
 % Run an Experimental Session
 %
 %
 
-nexp=length(session);
+nexp=length(experiments);
 counter(1:nexp)=0;
 trialN=0;
 
-maxTrials=max(nTrials(session));
+maxTrials=max(nTrials(experiments))
 
 % Main loop for the session
-while max(maxTrials-counter)~=0
+while maxTrials-max(counter)>0
     
     % run through one trial from each experiment
     for i=1:nexp
         
-        exper=session(i);
+        exper=experiments(i);
         % =find(strcmp({experimentNames{:}}, expname));
         
         % the condition after & shouldn't be there after other experiments
-        if counter(i)<nTrials(session(i))
-            
+        if counter(i)< nTrials(exper)
+               
             if trialN ~= 0
                 askReady(ws,double(settings.message3),settings);
             end
