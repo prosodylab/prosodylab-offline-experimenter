@@ -22,7 +22,7 @@ To set up an experiment, copy the entire 'experiment' folder, and adjust the exp
 
 The folder comes with some example scripts.
 
-Information on how to format your experiment spreadsheet can be found [here](). 
+Information on how to format your experiment spreadsheet can be found [here](https://github.com/prosodylab/prosodylab-experimenter/blob/master/instructions.Rmd). 
 
 
 
