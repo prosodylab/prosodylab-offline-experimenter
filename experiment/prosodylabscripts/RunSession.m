@@ -193,7 +193,7 @@ while maxTrials-max(counter)>0
                     
                     wavfilename=[settings.path_soundfiles wavfilename];
                     
-                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
+                    audiowrite(wavfilename,transpose(recordedaudio),settings.samplingFrequency,'BitsPerSample', 16);
                     
                     %Save .lab file
                     
@@ -228,7 +228,7 @@ while maxTrials-max(counter)>0
                     
                     wavfilename=[settings.path_soundfiles wavfilename];
                     
-                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
+                    audiowrite(wavfilename, transpose(recordedaudio), settings.samplingFrequency, 'BitsPerSample',16);
                     
                     %Save .lab file
                     
@@ -279,7 +279,7 @@ while maxTrials-max(counter)>0
                     
                     wavfilename=[settings.path_soundfiles wavfilename];
                     
-                    wavwrite(transpose(recordedaudio), settings.samplingFrequency, 16, wavfilename);
+                    audiowrite(wavfilename, transpose(recordedaudio), settings.samplingFrequency, 'BitsPerSample',16);
                     
                     %Save .lab file
                     
