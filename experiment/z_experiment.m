@@ -10,7 +10,7 @@ clc
 % item file (should be a tab-separated files, encoded in UTF-8)
 % only columns that are labeled in the header row will be read into a data structure
 
-itemFile='msvt.txt';
+itemFile='doff.txt';
 
 %Input and Output device (your present choice is displayed when you run
 %script.
