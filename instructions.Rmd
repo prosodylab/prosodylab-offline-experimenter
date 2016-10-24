@@ -5,7 +5,7 @@ output: html_document
 
 ### The Template
 
-* The expeirment template is a folder that contains all scripts for the experiment. The reason this folder is duplicated for each experiment is to ensure that the original scripts used to run the experiment will always be kept on file (even if the official template changes). 
+* The experiment template is a folder that contains all scripts for the experiment. The reason this folder is duplicated for each experiment is to ensure that the original scripts used to run the experiment will always be kept on file (even if the official template changes). 
 
 * The folder name and  experiment-script should be relabled with the experiment name, so it's clear which experiment the template is running. 
 
