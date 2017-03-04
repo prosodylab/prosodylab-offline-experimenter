@@ -1,0 +1,65 @@
+experiment	item	condition	conditionLabel	clitic	text	qType	question	design	record
+floc2	1	1	argument	n	L'armoire il veut remplacer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	1	2	argument	y	L'armoire il veut la remplacer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	1	3	adjunct	n	Dans l'armoire il a vu une souris.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	1	4	adjunct	y	Dans l'armoire il y a vu une souris.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	2	1	argument	n	De la voisine il doit s'occuper.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	2	2	argument	y	De la voisine il doit s'en occuper.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	2	3	adjunct	n	Chez la voisine il doit nettoyer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	2	4	adjunct	y	Chez la voisine il doit y nettoyer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	3	1	argument	n	Sa grand-mère il veut rencontrer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	3	2	argument	y	Sa grand-mère il veut la rencontrer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	3	3	adjunct	n	Chez sa grand-mère il veut jardiner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	3	4	adjunct	y	Chez sa grand-mère il veut y jardiner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	4	1	argument	n	Le Louvre il veut visiter.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	4	2	argument	y	Le Louvre il veut le visiter.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	4	3	adjunct	n	Au Louvre il veut dessiner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	4	4	adjunct	y	Au Louvre il veut y dessiner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	5	1	argument	n	Sa guitare elle veut vendre.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	5	2	argument	y	Sa guitare elle veut la vendre.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	5	3	adjunct	n	Pour sa guitare elle veut acheter des cordes.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	5	4	adjunct	y	Pour sa guitare elle veut y acheter des cordes.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	6	1	argument	n	La table elle veut rénover.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	6	2	argument	y	La table elle veut la rénover.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	6	3	adjunct	n	Sur La table elle veut bricoler.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	6	4	adjunct	y	Sur La table elle veut y bricoler.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	7	1	argument	n	De sa voiture il veut profiter. 	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	7	2	argument	y	De sa voiture il veut en profiter. 	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	7	3	adjunct	n	Dans sa voiture il veut dormir. 	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	7	4	adjunct	y	Dans sa voiture il veut y dormir. 	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	8	1	argument	n	Son ordinateur il veut faire réparer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	8	2	argument	y	Son ordinateur il veut le faire réparer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	8	3	adjunct	n	Près de son ordinateur il veut travailler.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	8	4	adjunct	y	Près de son ordinateur il veut y travailler.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	9	1	argument	n	De son école il s'est souvenu.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	9	2	argument	y	De son école il s'en est souvenu.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	9	3	adjunct	n	Près de son école il veut picniquer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	9	4	adjunct	y	Près de son école il veut y picniquer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	10	1	argument	n	De son atelier Thomas parlait.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	10	2	argument	y	De Son atelier Thomas en parlait.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	10	3	adjunct	n	Dans son atelier Thomas sculptait.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	10	4	adjunct	y	Dans son atelier Thomas y sculptait.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	11	1	argument	n	De Marseille elle rêve.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	11	2	argument	y	De Marseille elle en rêve.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	11	3	adjunct	n	A Marseille elle s'ennuie.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	11	4	adjunct	y	A Marseille elle s'y ennuie.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	12	1	argument	n	Du violon elle veut vraiment jouer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	12	2	argument	y	Du violon elle veut vraiment  en jouer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	12	3	adjunct	n	Sur son violon elle veut vraiment s'exercer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	12	4	adjunct	y	Sur son violon elle veut vraiment s'y exercer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	13	1	argument	n	L’escalier il veut restaurer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	13	2	argument	y	L’escalier il veut le restaurer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	13	3	adjunct	n	 Sous l'escalier il veut  balayer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	13	4	adjunct	y	 Sous l'escalier il veut y balayer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	14	1	argument	n	Dans son monastère elle veut retourner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	14	2	argument	y	Dans son monastère elle veut y retourner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	14	3	adjunct	n	Dans son monastère  elle veut méditer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	14	4	adjunct	y	Dans son monastère  elle veut méditer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	15	1	argument	n	Le salon elle veut décorer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	15	2	argument	y	Le salon elle veut le décorer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	15	3	adjunct	n	Dans le salon elle veut relaxer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	15	4	adjunct	y	Dans le salon elle veut y relaxer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	16	1	argument	n	Dans leur maison il veut séjourner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	16	2	argument	y	Dans leur maison il veut y séjourner.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	16	3	adjunct	n	Dans leur maison il veut se reposer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record
+floc2	16	4	adjunct	y	Dans leur maison il veut s’y reposer.	jm	Est-ce que la forme de la phrase est naturelle?  \nentre 1 (pas du tout naturelle) et 7 (très naturelle)	LatinSquare	record

@@ -10,7 +10,7 @@ clc
 % item file (should be a tab-separated files, encoded in UTF-8)
 % only columns that are labeled in the header row will be read into a data structure
 
-itemFile='doff.txt';
+itemFile='floc2.txt';
 
 %Input and Output device (your present choice is displayed when you run
 %script.
@@ -387,8 +387,6 @@ for i=1:nSessions
     % for each session, run RunExp
     
     % Making sure font settings are correct
-    Screen('Preference', 'TextRenderer', 1 );
-    Screen('Preference','TextEncodingLocale','UTF-8');
     Screen('TextSize', ws.ptr, settings.textsize);
     
     displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
