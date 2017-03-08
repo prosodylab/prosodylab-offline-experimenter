@@ -1,17 +1,13 @@
 
 Welcome!
 
-In this experiment you will be shown a series of paragraphs, followed by a line that summarizes the upshot of what happened.
+In this experiment, you are asked to participate in a series of scripted dialogues.
 
-Please read each paragraph and following line silently to yourself first. When you are 
-ready to record, press a button.
+First you are asked to read the dialogue.
+When you're ready to record, you can proceed by pressing any key. 
+You will then hear the question that one person is askign, and your task is to respond. 
 
-Then please record only the final line (two sentences) as naturally as possible and try to imagine you are
-describing a real scenario to someone you're talking to.
-
-The recordings will be played to people who will have to then answer questions about what happened.
-
-After recording each story, you will be asked how natural the *last sentence* sounded given the preceding story.
+After the recording, you will be asked how natural the response sounded given the preceding story (some might be a bit odd!).
 
 If you have any questions, ask the experimenter now. 
 Otherwise, press any key to start.
