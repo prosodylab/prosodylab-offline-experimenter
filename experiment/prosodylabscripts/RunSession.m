@@ -114,9 +114,9 @@ while maxTrials-max(counter)>0
                 while KbCheck([-1]); end;
                 
                 % display image if there is an image column
-                if isfield(playList{i}(k),'image')
-                    if playList{i}(k).picture~=''
-                        imdata=imread([ path_images  playList{i}(k).picture]);
+                if isfield(playList{exper}(k),'image')
+                    if playList{exper}(k).image~=''
+                        imdata=imread([ path_images  playList{exper}(k).image]);
                         
                         %[x,y]=size(imdata);
                         
