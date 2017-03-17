@@ -136,8 +136,8 @@ settings.additionalColNames={'participant','playlist','experimentTrial','session
 %
 
 settings.samplingFrequency=22050;
-settings.maxsecs=300;
-settings.voiceTrigger=0.05;
+settings.maxsecs=10;
+settings.voiceTrigger=0;
 settings.paceDelay=1; % in seconds
 
 % unify key names across operating systems
