@@ -69,6 +69,9 @@ for i=1:lengthItems
     if isfield(items, 'experimentTrial')
         items(i).experimentTrial=str2double(items(i).experimentTrial);
     end
+        if isfield(items, 'playlist')
+        items(i).playlist=str2double(items(i).playlist);
+    end
 end
 
 
