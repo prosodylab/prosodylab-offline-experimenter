@@ -14,10 +14,10 @@ if fid==-1
     error('Experimentfile file was not found, please verify file name');
 end
 
-columnNames = fgetl(fid);
+columnNames = strcat(fgetl(fid));
 %columnNames = textscan(columnNames, '%s','delimiter','\t','BufSize',16384);
 
-columnNames = regexp(columnNames,'\t','split');
+columnNames = strsplit(columnNames,'\t');
 [a nCol]=size(columnNames);
 
 nTrials=0;
@@ -33,10 +33,10 @@ while line ~= -1
     if line ~= -1
         
          nTrials=nTrials+1;
-        
+       
          % parse line of textfile into cells
-         content = regexp(line,'\t','split');
-         %content = [content{1}];
+         content = strsplit(line,'\t');
+
          % store how many cells were in this line
          [a nCells]=size(content);
          
@@ -46,10 +46,6 @@ while line ~= -1
              % this makes script compatible with lines that are shorter
              % than others
              if i <= nCells
-                % If cell content is numeric, then turn string into number 
-                if ~isempty(str2num(content{i}))
-                    content{i}=str2num(content{i});
-                end
                 % store cell number into variable
                 items(nTrials).(genvarname(columnNames{i}))=content{i};
              else
@@ -59,8 +55,28 @@ while line ~= -1
     end
 end
 
+% convert certain columns to numbers
+lengthItems=length(items);
+for i=1:lengthItems
+    items(i).condition=str2double(items(i).condition);
+    items(i).item=str2double(items(i).item);
+    if isfield(items, 'session')
+        items(i).session=str2double(items(i).session);
+    end
+    if isfield(items, 'nChoices')
+        items(i).nChoices=str2double(items(i).nChoices);
+    end
+    if isfield(items, 'experimentTrial')
+        items(i).experimentTrial=str2double(items(i).experimentTrial);
+    end
+        if isfield(items, 'playlist')
+        items(i).playlist=str2double(items(i).playlist);
+    end
+end
+
+
 fclose(fid);
-        
+ 
 end
 
 

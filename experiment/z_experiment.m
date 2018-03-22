@@ -24,7 +24,7 @@ itemFile='doff.txt';
 % settings for mac laptop: usually '0' for input, '1' for default output
 
 settings.outputdevice=1;
-settings.inputdevice=0;
+settings.inputdevice=1;
 
 % Design: Needs to be specified in column 'design' in experiment spreadsheet
 % Options:
@@ -66,9 +66,9 @@ designs={'Between' 'Blocked' 'BlockedFixed' 'Fixed'  'LatinSquare' 'Random' 'Wit
 %     Everyone see all conditison from all items.
 %     Trials are randomized in blocks, such that each block corresponds
 %     to a latin square set up (one condition from each item, equal number
-%     from each condition). 
+%     from each condition).
 %     Order within block is pseudo-random, conditions can only be repeated once.
-%     order of blocks are randomized. 
+%     order of blocks are randomized.
 %     Number of items has to be divisible by number of conditions
 %     First item=n/nCondition trials can be analyzed as latin square design
 %     experiment.
@@ -136,8 +136,8 @@ settings.additionalColNames={'participant','playlist','experimentTrial','session
 %
 
 settings.samplingFrequency=22050;
-settings.maxsecs=300;
-settings.voiceTrigger=0.05;
+settings.maxsecs=10;
+settings.voiceTrigger=0;
 settings.paceDelay=1; % in seconds
 
 % unify key names across operating systems
@@ -179,6 +179,7 @@ disp(' ');
 disp('(you can change this number on line 132-133 in code)');
 disp(' ');
 
+ListenChar(-1);
 while KbCheck(-1); end;
 disp('ok?');
 disp(' ');
@@ -189,7 +190,7 @@ while ~KbCheck(-1); end;
 if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
-
+ListenChar(1);
 
 %
 %  -------------------------
@@ -207,13 +208,13 @@ nExperiments=length(experimentNames);
 % add session column if there is none
 if ~isfield(allItems, 'session')
     [allItems.session]=deal(1);
-    columnNames= [columnNames,'session']; 
+    columnNames= [columnNames,'session'];
 end
 
 % add default instructions file name if there isn't one specified
 if ~isfield(allItems, 'instructions')
     [allItems.instructions]=deal('instructions.txt');
-    columnNames= [columnNames,'instructions']; 
+    columnNames= [columnNames,'instructions'];
 end
 % set up sessions
 nSessions=max([allItems.session]);
@@ -340,26 +341,39 @@ for i=1:nSessions
         
         
         if isfield(playList{exper}(1),'contextFile')
-             existingContextFiles=extractfield(dir([settings.path_contexts]),'name');
-             contextFiles=extractfield(playList{exper}(:),'contextFile');
-             if min(ismember(contextFiles,existingContextFiles))==0
+            existingContextFiles=extractfield(dir([settings.path_contexts]),'name');
+            contextFiles=extractfield(playList{exper}(:),'contextFile');
+            if min(ismember(contextFiles,existingContextFiles))==0
                 disp('Not all context files found in folder');
                 disp('');
                 disp(['Missing files:' contextFiles(~ismember(contextFiles,existingContextFiles)) ]);
-                 error(['Add missing context files or fix name! (Path: ' settings.path_contexts ')']);
-             end
-         end
-         
-         if isfield(playList{exper}(1),'answerFile')
-             existingAnswerFiles=extractfield(dir([settings.path_answers]),'name');
-             answerFiles=extractfield(playList{exper}(:),'answerFile');
-             if min(ismember(answerFiles,existingAnswerFiles))==0
+                error(['Add missing context files or fix name! (Path: ' settings.path_contexts ')']);
+            end
+        end
+        
+        if isfield(playList{exper}(1),'answerFile')
+            existingAnswerFiles=extractfield(dir([settings.path_answers]),'name');
+            answerFiles=extractfield(playList{exper}(:),'answerFile');
+            if min(ismember(answerFiles,existingAnswerFiles))==0
                 disp('Not all answer files found in folder');
                 disp('');
                 disp(['Missing files:' answerFiles(~ismember(answerFiles,existingContextFiles)) ]);
                 error(['Add missing context files or fix name! (Path: ' settings.path_answers ')']);
-             end
-         end
+            end
+        end
+        
+        if isfield(playList{exper}(1),'image')
+            existingImageFiles=extractfield(dir([settings.path_images]),'name');
+            imageFiles=extractfield(playList{exper}(:),'image');
+            imageFiles=imageFiles(~strcmp(imageFiles,''));
+            if min(ismember(imageFiles,existingImageFiles))==0
+                disp('Not all context files found in folder');
+                disp('');
+                disp(['Missing files:' imageFiles(~ismember(imageFiles,existingImageFiles)) ]);
+                error(['Add missing context files or fix name! (Path: ' settings.path_images ')']);
+            end
+        end
+        
         
         %
         
@@ -386,9 +400,6 @@ ws = doScreen(settings);
 for i=1:nSessions
     % for each session, run RunExp
     
-    % Making sure font settings are correct
-    Screen('Preference', 'TextRenderer', 1 );
-    Screen('Preference','TextEncodingLocale','UTF-8');
     Screen('TextSize', ws.ptr, settings.textsize);
     
     displayInstructions(ws, [settings.path_instructions instructions{i}], settings);

@@ -4,7 +4,7 @@ AssertOpenGL;
 InitializePsychSound;
 
 % read in context file
-[y, freq, nbits] = wavread(soundFile);
+[y, freq] = audioread(soundFile);
 wavedata = y';
 nrchannels = size(wavedata,1);
 duration=size(wavedata,2)/freq;

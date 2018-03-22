@@ -1,3 +1,4 @@
+experiment/2_data/*.txt
 *.wav
 *.lab
 *.TextGrid

@@ -152,8 +152,7 @@ elseif (strcmp(qType,'mc'))||(strcmp(qType,'mcF'))
         
     else
         answer_array={answer1 answer2 answer3 answer4};
-        mc_options=strcat('1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n\n','3. ',answer_array{rand_index(3)},'\n\n','4. ',answer_array{rand_index(4)},'\n\n\n',quText);
-        
+        mc_options=strcat(quText,'\n\n','1. ',answer_array{rand_index(1)},'\n\n','2. ',answer_array{rand_index(2)},'\n\n','3. ',answer_array{rand_index(3)},'\n\n','4. ',answer_array{rand_index(4)},'\n\n\n');
     end
     
     DrawFormattedText(ws.ptr, double(mc_options),settings.messagex,settings.messagey,0,settings.textwidth,[],[],1.2);
@@ -226,7 +225,6 @@ end
 
 % Save results in structure
 if qNumber == 1
-    
     trial.response=user_answer;
     trial.correct=num2str(check_answer);
     trial.rt=num2str(resp_time);

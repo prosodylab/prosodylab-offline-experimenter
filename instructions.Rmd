@@ -33,7 +33,7 @@ output: html_document
 These are columns that are used to convey to the experimenter various crucial pieces of information about the design of the experiment:
 
 ```{r, eval=FALSE}
-c('experiment','item','condition','text','context','setup','question','qType','design','session','reTrial','nChoices','contextFile','answerFile','instructions','lab','correctAnswer', 'altAnswer1', 'altAnswer2', 'altAnswer3')
+c('experiment','item','condition','text','context','setup','question','qType','design','session','retrial','nChoices','contextFile','answerFile','instructions','lab','correctAnswer', 'altAnswer1', 'altAnswer2', 'altAnswer3')
 ```
 
 These are columns that the experimenter uses to convey information about the experiment in the responses spreadsheet that it creates:
@@ -89,7 +89,7 @@ c('experiment','item','condition','design')
 
 * If you want to play an entire dialogue, you can add a column **answerFile**. Answerfiles should be placed in a folder "2_answers" (path name can be adjusted in variable settings.answerFile in the experiment script).
 
-* If you want to give participants the option of repeating a trial, you need to add a column **reTrial** with 'y' or 'yes' in every cell for which a reTrial should be possible.
+* If you want to give participants the option of repeating a trial, you need to add a column **retrial** with 'y' or 'yes' in every cell for which a retrial should be possible.
 
 * If you want multiple sessions (e.g., practice session, main experiment; or training and main experiment), then the spreadsheet should contain multiple experimments, and each experiment is assigned a session number (e.g., the practice session would be '1', and the main experiment would be '2'). The default session number is '1' (when there is no column **session**, then it is assumed that all experiments are in the same session). If multiple experiments are assigned to the same session they are interspersed, and effectively act as fillers to each other (trials will alternate between experiments).
 
