@@ -24,7 +24,7 @@ itemFile='doff.txt';
 % settings for mac laptop: usually '0' for input, '1' for default output
 
 settings.outputdevice=1;
-settings.inputdevice=0;
+settings.inputdevice=1;
 
 % Design: Needs to be specified in column 'design' in experiment spreadsheet
 % Options:
@@ -179,6 +179,7 @@ disp(' ');
 disp('(you can change this number on line 132-133 in code)');
 disp(' ');
 
+ListenChar(-1);
 while KbCheck(-1); end;
 disp('ok?');
 disp(' ');
@@ -189,7 +190,7 @@ while ~KbCheck(-1); end;
 if strcmp('n',KbName(keyCode))
     error('Ok! Please change device numbers in the script!');
 end
-
+ListenChar(1);
 
 %
 %  -------------------------
@@ -399,7 +400,6 @@ ws = doScreen(settings);
 for i=1:nSessions
     % for each session, run RunExp
     
-    % Making sure font settings are correct
     Screen('TextSize', ws.ptr, settings.textsize);
     
     displayInstructions(ws, [settings.path_instructions instructions{i}], settings);
