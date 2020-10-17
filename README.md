@@ -1,4 +1,4 @@
-prosodylab-experimenter
+prosodylab-offline-experimenter
 =======================
 
 This repository is now defunct. We moved to online experiments using javascript. 
