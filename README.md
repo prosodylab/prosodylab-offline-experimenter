@@ -1,6 +1,9 @@
 prosodylab-experimenter
 =======================
 
+This repository is now defunct. We moved to online experiments using javascript. 
+Please be aware that the last time we used the scripts in fall 2019, the Psychtoolbox was no longer compatible with current Mac operating systems (we used a computer running Sierra to get it to work reliably.). 
+
 ## Matlab Scripts to Run Production and Perception Experiments
 
 * Michael Wagner <chael@mcgill.ca>
